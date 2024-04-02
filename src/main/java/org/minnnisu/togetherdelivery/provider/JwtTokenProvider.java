@@ -53,6 +53,7 @@ public class JwtTokenProvider {
         Date now = new Date();
 
         return Jwts.builder()
+                .setHeaderParam("typ","JWT")
                 .setClaims(claims) //정보 저장
                 .setIssuedAt(now) //토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + accessTokenExpirationPeriod))
@@ -65,6 +66,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         return Jwts.builder()
+                .setHeaderParam("typ","JWT")
                 .setExpiration(new Date(now.getTime() + refreshTokenExpirationPeriod))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
