@@ -2,8 +2,7 @@ package org.minnnisu.togetherdelivery.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.minnnisu.togetherdelivery.dto.SignupRequestDto;
-import org.minnnisu.togetherdelivery.dto.UserLoginRequestDto;
+import org.minnnisu.togetherdelivery.dto.auth.SignupRequestDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;

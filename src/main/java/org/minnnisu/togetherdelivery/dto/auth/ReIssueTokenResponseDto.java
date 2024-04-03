@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto;
+package org.minnnisu.togetherdelivery.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

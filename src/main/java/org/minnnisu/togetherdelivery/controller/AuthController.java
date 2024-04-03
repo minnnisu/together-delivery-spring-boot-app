@@ -3,7 +3,7 @@ package org.minnnisu.togetherdelivery.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.minnnisu.togetherdelivery.dto.*;
+import org.minnnisu.togetherdelivery.dto.auth.*;
 import org.minnnisu.togetherdelivery.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

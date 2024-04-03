@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.LoginResponseDto;
+import org.minnnisu.togetherdelivery.dto.auth.LoginResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
