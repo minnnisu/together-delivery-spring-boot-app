@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class) // 추가
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
     @Id @GeneratedValue
     private Long id;

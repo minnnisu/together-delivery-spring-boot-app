@@ -3,10 +3,14 @@ package org.minnnisu.togetherdelivery.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.minnnisu.togetherdelivery.dto.auth.SignupRequestDto;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -16,21 +20,39 @@ import java.util.Collections;
 @AllArgsConstructor
 @Builder
 @Table(name = "Users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @GeneratedValue
     @Id
     private Long id;
+
     private String username;
+
     private String password;
+
     private String name;
+
     private String nickname;
+
     private String email;
+
     private boolean isTelephoneAuth;
+
     private String telephone;
+
     private boolean isCollegeAuth;
+
     private String college;
+
     private String authority;
 
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime deletedAt;
 
     public User(
             String username,
