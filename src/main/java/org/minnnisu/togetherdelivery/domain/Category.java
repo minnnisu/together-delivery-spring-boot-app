@@ -17,5 +17,17 @@ public class Category {
     @GeneratedValue
     private Long id;
 
+    private String categoryCode;
+
     private String categoryName;
+
+    public static Category of(
+            String categoryCode,
+            String categoryName
+    ){
+        return Category.builder()
+                .categoryCode(categoryCode)
+                .categoryName(categoryName)
+                .build();
+    }
 }

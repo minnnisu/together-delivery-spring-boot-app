@@ -2,8 +2,10 @@ package org.minnnisu.togetherdelivery.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class) // 추가
 public class Post {
     @Id @GeneratedValue
     private Long id;
@@ -30,9 +33,9 @@ public class Post {
     @OneToOne
     private Category category;
 
-    private Integer deliveryFee;
+    private int deliveryFee;
 
-    private Integer minOrderFee;
+    private int minOrderFee;
 
     private String location;
 
@@ -43,4 +46,17 @@ public class Post {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category) {
+        return Post.builder()
+                .user(user)
+                .title(postSaveRequestDto.getTitle())
+                .content(postSaveRequestDto.getContent())
+                .restaurantName(postSaveRequestDto.getRestaurantName())
+                .category(category)
+                .deliveryFee(postSaveRequestDto.getDeliveryFee())
+                .minOrderFee(postSaveRequestDto.getMinOrderFee())
+                .location(postSaveRequestDto.getLocation())
+                .build();
+    }
 }

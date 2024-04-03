@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
-public enum ErrorCode {
+public enum ErrorCode{
     NotValidRequestError(
             HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."
     ),
@@ -54,6 +54,17 @@ public enum ErrorCode {
     ),
     NoSuchRefreshTokenError(
             HttpStatus.BAD_REQUEST, "존재하지 않은 RefreshToken입니다."
+    ),
+
+    // ----- Category ------
+    NoSuchCategoryError(
+            HttpStatus.BAD_REQUEST, "존재하지 않은 카테고리입니다."
+    ),
+
+
+
+    NoRequestBodyError(
+            HttpStatus.BAD_REQUEST, "request body가 전달되지 않았습니다."
     ),
     IllegalArgumentError(
             HttpStatus.BAD_REQUEST, "잘못된 값이 전달되었습니다"
