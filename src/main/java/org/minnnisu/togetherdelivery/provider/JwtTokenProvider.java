@@ -53,7 +53,7 @@ public class JwtTokenProvider {
         Date now = new Date();
 
         return Jwts.builder()
-                .setHeaderParam("typ","JWT")
+                .setHeaderParam("typ", "JWT")
                 .setClaims(claims) //정보 저장
                 .setIssuedAt(now) //토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + accessTokenExpirationPeriod))
@@ -66,7 +66,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         return Jwts.builder()
-                .setHeaderParam("typ","JWT")
+                .setHeaderParam("typ", "JWT")
                 .setExpiration(new Date(now.getTime() + refreshTokenExpirationPeriod))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -102,11 +102,11 @@ public class JwtTokenProvider {
     }
 
 
-    public boolean isExpiredAccessToken(String accessToken){
-        try{
+    public boolean isExpiredAccessToken(String accessToken) {
+        try {
             validateAccessToken(accessToken);
-        }catch (CustomErrorException e){
-            if(e.getErrorCode() == ErrorCode.ExpiredAccessTokenError){
+        } catch (CustomErrorException e) {
+            if (e.getErrorCode() == ErrorCode.ExpiredAccessTokenError) {
                 return true;
             }
             throw e;
@@ -121,14 +121,14 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
+
     public void responseAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setHeader(accessHeader, accessToken);
-        response.setHeader(refreshHeader, refreshToken);
+
         try {
-            String json = new ObjectMapper().writeValueAsString(new LoginResponseDto());
+            String json = new ObjectMapper().writeValueAsString(LoginResponseDto.of(accessToken, refreshToken));
             response.getWriter().write(json);
         } catch (Exception ex) {
             log.error(ex.getMessage());

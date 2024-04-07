@@ -1,14 +1,25 @@
 package org.minnnisu.togetherdelivery.dto.auth;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 public class LoginResponseDto {
-    String message;
+    private String accessToken;
+    private String refreshToken;
 
-    public LoginResponseDto(){
-        this.message = "성공적으로 로그인하였습니다.";
+    public static LoginResponseDto of(
+            String accessToken,
+            String refreshToken
+    ){
+        return LoginResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
