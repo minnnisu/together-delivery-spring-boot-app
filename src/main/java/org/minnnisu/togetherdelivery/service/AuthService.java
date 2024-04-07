@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.auth.ReIssueTokenDto;
-import org.minnnisu.togetherdelivery.dto.auth.SignupDto;
-import org.minnnisu.togetherdelivery.dto.auth.SignupRequestDto;
+import org.minnnisu.togetherdelivery.dto.auth.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.provider.JwtTokenProvider;
 import org.minnnisu.togetherdelivery.repository.UserRepository;
@@ -31,18 +29,35 @@ public class AuthService {
             SignupRequestDto signupRequestDto
     ) {
         if (userRepository.findByUsername(signupRequestDto.getUsername()).isPresent()) {
-            throw new CustomErrorException(ErrorCode.DuplicatedUserNameError);
+            throw new CustomErrorException(ErrorCode.DuplicatedUsernameError);
+        }
+
+        if (userRepository.findByNickname(signupRequestDto.getNickname()).isPresent()) {
+            throw new CustomErrorException(ErrorCode.DuplicatedNicknameError);
         }
 
         checkPasswordAndPasswordCheckEqual(signupRequestDto.getPassword(), signupRequestDto.getPasswordCheck());
 
-        User user =  userRepository.save(User.fromDto(signupRequestDto, passwordEncoder));
+        User user = userRepository.save(User.fromDto(signupRequestDto, passwordEncoder));
         return SignupDto.fromEntity(user);
     }
 
     private void checkPasswordAndPasswordCheckEqual(String password, String passwordCheck) {
-        if (!password.equals(passwordCheck)){
+        if (!password.equals(passwordCheck)) {
             throw new CustomErrorException(ErrorCode.NotEqualPasswordAndPasswordCheck);
+        }
+    }
+
+    public void checkUsernameDuplication(UsernameDuplicationCheckDto usernameDuplicationCheckDto) {
+        if (userRepository.findByUsername(usernameDuplicationCheckDto.getUsername()).isPresent()) {
+            throw new CustomErrorException(ErrorCode.DuplicatedUsernameError);
+        }
+    }
+
+
+    public void checkNicknameDuplication(NicknameDuplicationCheckDto nicknameDuplicationCheckDto) {
+        if (userRepository.findByNickname(nicknameDuplicationCheckDto.getNickname()).isPresent()) {
+            throw new CustomErrorException(ErrorCode.DuplicatedNicknameError);
         }
     }
 
