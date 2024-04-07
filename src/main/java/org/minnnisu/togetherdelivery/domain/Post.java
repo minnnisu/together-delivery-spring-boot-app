@@ -30,7 +30,7 @@ public class Post {
 
     private String restaurantName;
 
-    @OneToOne
+    @ManyToOne
     private Category category;
 
     private int deliveryFee;
