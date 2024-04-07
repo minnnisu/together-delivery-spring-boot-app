@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class SignupRequestDto {
     @NotBlank(message = "NoUsernameError")
-    @Size(min = 4, max = 20, message = "NotValidUsernameError")
+    @Size(min = 4, max = 20, message = "TooShortOrLongUsernameError")
     /*
      * 문자열이 영문 대소문자와 숫자로만 이루어져 있다
      */
@@ -20,7 +20,7 @@ public class SignupRequestDto {
 
 
     @NotBlank(message = "NoPasswordError")
-    @Size(min = 8, max = 20, message = "NotValidPasswordError")
+    @Size(min = 8, max = 20, message = "TooShortOrLongPasswordError")
     /*
      * 적어도 하나의 영문자를 포함해야 합니다.
      * 적어도 하나의 숫자를 포함해야 합니다.
@@ -31,31 +31,31 @@ public class SignupRequestDto {
     private String password;
 
     @NotBlank(message = "NoPasswordCheckError")
-    @Size(min = 8, max = 20, message = "NotValidPasswordCheckError")
+    @Size(min = 8, max = 20, message = "TooShortOrLongPasswordCheckError")
     /*
      * password 필드와 동일
      */
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]+$", message = "NotValidPasswordError")
     private String passwordCheck;
 
-    @Size(min = 2, max = 20, message = "NotValidNameError")
     @NotBlank(message = "NoNameError")
+    @Size(min = 2, max = 20, message = "TooShortOrLongNameError")
     private String name;
 
-    @Size(min = 2, max = 10, message = "NotValidNicknameError")
     @NotBlank(message = "NoNicknameError")
+    @Size(min = 2, max = 10, message = "TooShortOrLongNicknameError")
     private String nickname;
 
-    @Email
-    @Size(max = 30, message = "NotValidEmailError")
+    @Email(message = "NotValidEmailError")
     @NotBlank(message = "NoEmailError")
+    @Size(max = 30, message = "TooShortOrLongEmailError")
     private String email;
 
-    @Size(max = 20, message = "NotValidTelephoneError")
     @NotBlank(message = "NoTelephoneError")
+    @Size(max = 20, message = "TooShortOrLongTelephoneError")
     private String telephone;
 
-    @Size(max = 20, message = "NotValidCollegeError")
     @NotBlank(message = "NoCollegeError")
+    @Size(max = 20, message = "TooShortOrLongCollegeError")
     private String college;
 }
