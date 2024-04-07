@@ -6,12 +6,15 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
-public enum ErrorCode{
+public enum ErrorCode {
     NotValidRequestError(
             HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."
     ),
-    DuplicatedUserNameError(
+    DuplicatedUsernameError(
             HttpStatus.CONFLICT, "중복된 아이디입니다."
+    ),
+    DuplicatedNicknameError(
+            HttpStatus.CONFLICT, "중복된 닉네임입니다"
     ),
     NotEqualPasswordAndPasswordCheck(
             HttpStatus.BAD_REQUEST, "패스워드와 패스워드 재입력이 일치하지 않습니다."
@@ -62,6 +65,10 @@ public enum ErrorCode{
     ),
 
 
+    // ----- Post -----
+    NoSuchPostError(
+            HttpStatus.NOT_FOUND, "존재하지 않은 배달 게시물입니다."
+    ),
 
     NoRequestBodyError(
             HttpStatus.BAD_REQUEST, "request body가 전달되지 않았습니다."
