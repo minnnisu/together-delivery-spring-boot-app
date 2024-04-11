@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false, defaultValue = "0") int page){
+    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false, defaultValue = "1") int page){
         PostListResponseDto responseDto = postService.getPost(page);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

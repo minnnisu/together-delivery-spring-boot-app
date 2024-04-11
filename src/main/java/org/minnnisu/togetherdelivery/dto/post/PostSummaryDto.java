@@ -12,31 +12,27 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class PostDto {
+public class PostSummaryDto {
     private Long id;
     private String nickname;
     private String title;
     private String content;
-    private String restaurantName;
     private String categoryCode;
     private int deliveryFee;
     private int minOrderFee;
-    private String location;
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static PostDto fromEntity(Post post){
-        return PostDto.builder()
+    public static PostSummaryDto fromEntity(Post post){
+        return PostSummaryDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .restaurantName(post.getRestaurantName())
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
-                .location(post.getLocation())
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

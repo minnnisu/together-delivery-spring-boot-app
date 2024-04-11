@@ -23,6 +23,7 @@ public class PostSaveResponseDto {
     private int deliveryFee;
     private int minOrderFee;
     private String location;
+    private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -37,6 +38,7 @@ public class PostSaveResponseDto {
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
                 .location(post.getLocation())
+                .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();

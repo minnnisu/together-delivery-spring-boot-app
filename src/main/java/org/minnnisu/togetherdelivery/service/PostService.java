@@ -28,7 +28,7 @@ public class PostService{
     private final int PAGE_SIZE = 10;
 
     public PostListResponseDto getPost(int pageNo) {
-        Page<Post> post = postRepository.findAll(PageRequest.of(pageNo, PAGE_SIZE));
+        Page<Post> post = postRepository.findAll(PageRequest.of(pageNo - 1, PAGE_SIZE));
         return PostListResponseDto.fromPage(post);
     }
 
@@ -40,7 +40,7 @@ public class PostService{
 
     public PostSaveResponseDto savePost(User user, PostSaveRequestDto postSaveRequestDto) {
         if (user == null) {
-            throw new CustomErrorException(ErrorCode.AccessDeniedError);
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
         }
 
         Category category = categoryRepository.findByCategoryCode(postSaveRequestDto.getCategoryCode())
