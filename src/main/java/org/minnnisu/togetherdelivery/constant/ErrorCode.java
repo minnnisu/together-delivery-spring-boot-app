@@ -35,28 +35,28 @@ public enum ErrorCode {
             HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생하였습니다. 문제가 지속되면 관리자에게 문의하세요."
     ),
     NotValidAccessTokenError(
-            HttpStatus.BAD_REQUEST, "유효하지 않은 AccessToken입니다."
+            HttpStatus.UNAUTHORIZED, "유효하지 않은 AccessToken입니다."
     ),
     NotExpiredAccessTokenError(
-            HttpStatus.BAD_REQUEST, "만료되지 않은 AccessToken입니다."
+            HttpStatus.UNAUTHORIZED, "만료되지 않은 AccessToken입니다."
     ),
     ExpiredAccessTokenError(
-            HttpStatus.BAD_REQUEST, "만료된 AccessToken입니다."
+            HttpStatus.UNAUTHORIZED, "만료된 AccessToken입니다."
     ),
     NoSuchAccessTokenError(
-            HttpStatus.BAD_REQUEST, "존재하지 않은 AccessToken입니다."
+            HttpStatus.UNAUTHORIZED, "존재하지 않은 AccessToken입니다."
     ),
     NotValidRefreshTokenError(
-            HttpStatus.BAD_REQUEST, "유효하지 않은 RefreshToken입니다."
+            HttpStatus.UNAUTHORIZED, "유효하지 않은 RefreshToken입니다."
     ),
     NotExpiredRefreshTokenError(
-            HttpStatus.BAD_REQUEST, "만료되지 않은 RefreshToken입니다."
+            HttpStatus.UNAUTHORIZED, "만료되지 않은 RefreshToken입니다."
     ),
     ExpiredRefreshTokenError(
-            HttpStatus.BAD_REQUEST, "만료된 RefreshToken입니다."
+            HttpStatus.UNAUTHORIZED, "만료된 RefreshToken입니다."
     ),
     NoSuchRefreshTokenError(
-            HttpStatus.BAD_REQUEST, "존재하지 않은 RefreshToken입니다."
+            HttpStatus.UNAUTHORIZED, "존재하지 않은 RefreshToken입니다."
     ),
 
     // ----- Category ------
@@ -72,9 +72,6 @@ public enum ErrorCode {
 
     NoRequestBodyError(
             HttpStatus.BAD_REQUEST, "request body가 전달되지 않았습니다."
-    ),
-    IllegalArgumentError(
-            HttpStatus.BAD_REQUEST, "잘못된 값이 전달되었습니다"
     );
 
 

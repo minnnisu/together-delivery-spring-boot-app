@@ -43,10 +43,9 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<LogoutResponseDto> logout(
-            @RequestHeader("Authorization") String accessToken,
             @RequestHeader("Authorization-refresh") String refreshToken
     ) {
-        authService.logout(accessToken, refreshToken);
+        authService.logout(refreshToken);
 
         return new ResponseEntity<>(new LogoutResponseDto(), HttpStatus.CREATED);
     }

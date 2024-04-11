@@ -3,6 +3,7 @@ package org.minnnisu.togetherdelivery.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
+import org.minnnisu.togetherdelivery.constant.TokenType;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.auth.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
@@ -61,35 +62,32 @@ public class AuthService {
         }
     }
 
-    public void logout(String accessToken, String refreshToken) {
+    public void logout(String refreshToken) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
-        String resolvedAccessToken = jwtTokenProvider.resolveToken(accessToken);
         String resolvedRefreshToken = jwtTokenProvider.resolveToken(refreshToken);
 
-        if (resolvedAccessToken == null || resolvedRefreshToken == null) {
+        if (resolvedRefreshToken == null) {
             throw new CustomErrorException(ErrorCode.NotValidRequestError);
         }
 
         String savedAccessToken = valueOperations.get(resolvedRefreshToken);
         if (savedAccessToken == null) {
             throw new CustomErrorException(ErrorCode.NoSuchRefreshTokenError);
-        }
-
-        if (!resolvedAccessToken.equals(savedAccessToken)) {
-            // RefreshToken이 탈취 당한 것으로 판단
-            valueOperations.getAndDelete(resolvedRefreshToken);
-            throw new CustomErrorException(ErrorCode.NoSuchAccessTokenError);
         }
 
         valueOperations.getAndDelete(resolvedRefreshToken);
     }
 
     public ReIssueTokenDto reIssueToken(String accessToken, String refreshToken) {
+        log.info("POST /auth/refreshToken");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
         String resolvedAccessToken = jwtTokenProvider.resolveToken(accessToken);
         String resolvedRefreshToken = jwtTokenProvider.resolveToken(refreshToken);
+
+        log.info("accessToken: " + resolvedAccessToken);
+        log.info("refreshToken: " + resolvedRefreshToken);
 
         if (resolvedAccessToken == null || resolvedRefreshToken == null) {
             throw new CustomErrorException(ErrorCode.NotValidRequestError);
@@ -98,6 +96,13 @@ public class AuthService {
         String savedAccessToken = valueOperations.get(resolvedRefreshToken);
         if (savedAccessToken == null) {
             throw new CustomErrorException(ErrorCode.NoSuchRefreshTokenError);
+        }
+
+        // RefreshToken 유효성 및 만료여부 확인
+        boolean isExpiredRefreshToken = jwtTokenProvider.isExpiredToken(TokenType.REFRESH_TOKEN, resolvedRefreshToken);
+        if (isExpiredRefreshToken) {
+            valueOperations.getAndDelete(resolvedRefreshToken);
+            throw new CustomErrorException(ErrorCode.ExpiredRefreshTokenError);
         }
 
         if (!resolvedAccessToken.equals(savedAccessToken)) {
@@ -107,7 +112,7 @@ public class AuthService {
         }
 
         // AccessToken 유효성 및 만료여부 확인
-        boolean isExpiredAccessToken = jwtTokenProvider.isExpiredAccessToken(resolvedAccessToken);
+        boolean isExpiredAccessToken = jwtTokenProvider.isExpiredToken(TokenType.ACCESS_TOKEN, resolvedAccessToken);
         if (!isExpiredAccessToken) {
             // RefreshToken이 탈취 당한 것으로 판단
             valueOperations.getAndDelete(resolvedRefreshToken);

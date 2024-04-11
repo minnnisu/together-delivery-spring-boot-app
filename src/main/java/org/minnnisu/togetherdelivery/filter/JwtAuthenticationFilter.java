@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
+import org.minnnisu.togetherdelivery.constant.TokenType;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.exception.ErrorResponseDto;
 import org.minnnisu.togetherdelivery.provider.JwtTokenProvider;
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         log.info("JwtAuthenticationFilter 호출");
 
-        String accessToken = resolveAccessToken(request);
+        String accessToken = jwtTokenProvider.resolveToken(request.getHeader("Authorization"));
 
         if (accessToken == null) {
             chain.doFilter(request, response);
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            jwtTokenProvider.validateAccessToken(accessToken);
+            jwtTokenProvider.validateToken(TokenType.ACCESS_TOKEN, accessToken);
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
@@ -59,17 +60,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (request.getRequestURI().equals("/auth/logout") && request.getMethod().equals(HttpMethod.POST.name())) {
                 chain.doFilter(request, response);
             }
+
             jwtExceptionHandler(response, e);
         }
-    }
-
-    // Request Header 에서 토큰 정보 추출
-    private String resolveAccessToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 
 

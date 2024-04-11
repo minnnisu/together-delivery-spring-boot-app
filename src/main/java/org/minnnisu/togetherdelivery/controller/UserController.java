@@ -23,6 +23,6 @@ public class UserController {
             @AuthenticationPrincipal User user
     ) {
         UserInfoResponseDto userInfoResponseDto = userService.getUserInfo(user);
-        return new ResponseEntity<UserInfoResponseDto>(userInfoResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(userInfoResponseDto, HttpStatus.OK);
     }
 }

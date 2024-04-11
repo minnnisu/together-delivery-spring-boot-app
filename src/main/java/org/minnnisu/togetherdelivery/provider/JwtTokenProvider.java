@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
+import org.minnnisu.togetherdelivery.constant.TokenType;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.auth.LoginResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
@@ -89,24 +92,23 @@ public class JwtTokenProvider {
     }
 
     // 토큰 정보를 검증하는 메서드
-    public void validateAccessToken(String token) {
+    public void validateToken(TokenType tokenType, String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | UnsupportedJwtException e) {
-            throw new CustomErrorException(ErrorCode.NotValidAccessTokenError);
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            if (tokenType == TokenType.ACCESS_TOKEN) throw new CustomErrorException(ErrorCode.NotValidAccessTokenError);
+            if (tokenType == TokenType.REFRESH_TOKEN) throw new CustomErrorException(ErrorCode.NotValidRefreshTokenError);
         } catch (ExpiredJwtException e) {
-            throw new CustomErrorException(ErrorCode.ExpiredAccessTokenError);
-        } catch (IllegalArgumentException e) {
-            throw new CustomErrorException(ErrorCode.IllegalArgumentError);
+            if (tokenType == TokenType.ACCESS_TOKEN) throw new CustomErrorException(ErrorCode.ExpiredAccessTokenError);
+            if (tokenType == TokenType.REFRESH_TOKEN) throw new CustomErrorException(ErrorCode.ExpiredRefreshTokenError);
         }
     }
 
-
-    public boolean isExpiredAccessToken(String accessToken) {
+    public boolean isExpiredToken(TokenType tokenType, String token) {
         try {
-            validateAccessToken(accessToken);
+            validateToken(tokenType, token);
         } catch (CustomErrorException e) {
-            if (e.getErrorCode() == ErrorCode.ExpiredAccessTokenError) {
+            if (e.getErrorCode() == ErrorCode.ExpiredAccessTokenError || e.getErrorCode() == ErrorCode.ExpiredRefreshTokenError) {
                 return true;
             }
             throw e;
