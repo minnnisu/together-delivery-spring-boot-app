@@ -72,7 +72,20 @@ public enum ErrorCode {
 
     NoRequestBodyError(
             HttpStatus.BAD_REQUEST, "request body가 전달되지 않았습니다."
-    );
+    ),
+
+
+    // ---- Image ----
+    NoImageNameError(
+            HttpStatus.BAD_REQUEST, "이미지 이름을 찾을 수 없습니다."
+    ),
+    NoImageFileError(
+            HttpStatus.BAD_REQUEST, "이미지 파일만 업로드할 수 있습니다."
+    ),
+    SizeLimitExceededError(
+            HttpStatus.BAD_REQUEST, "업로드 가능한 파일 크기보다 큽니다."
+    )
+    ;
 
 
     private final HttpStatus httpStatus;

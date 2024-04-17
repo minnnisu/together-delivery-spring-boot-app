@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class ApiExceptionHandler {
     @ExceptionHandler(CustomErrorException.class)
     protected ResponseEntity<ErrorResponseDto> handleCustomErrorException(CustomErrorException e) {
+        log.error(e.getMessage());
         ErrorResponseDto errorResponseDto = ErrorResponseDto.fromException(e);
         return new ResponseEntity<>(errorResponseDto, e.getErrorCode().getHttpStatus());
     }
@@ -63,6 +65,14 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, ErrorCode.AccessDeniedError.getHttpStatus());
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<ErrorResponseDto> handleMaxUploadSizeExceededException() {
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.of(
+                ErrorCode.SizeLimitExceededError.name(),
+                ErrorCode.SizeLimitExceededError.getMessage());
+        return new ResponseEntity<>(errorResponseDto, ErrorCode.SizeLimitExceededError.getHttpStatus());
+    }
+
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<NotValidRequestErrorResponseDto> handleBindException(BindException e) {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
@@ -89,6 +99,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponseDto> HandleGeneralException(Exception e) {
+        log.error(e.getMessage());
         ErrorResponseDto errorResponseDto =
                 ErrorResponseDto.of(
                         ErrorCode.InternalServerError.name(),

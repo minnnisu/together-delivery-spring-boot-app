@@ -60,19 +60,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers((headerConfig) ->
                         headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable
                         )
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorizeRequests) ->
-                        authorizeRequests
-                                .requestMatchers("/", "/auth/**","/api/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+//                .authorizeHttpRequests(authorizeRequests ->
+//                        authorizeRequests
+//                                .requestMatchers("/", "/auth/**","/api/**","/h2-console").permitAll()
+//                                .anyRequest().authenticated()
+//                )
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
                 .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customJsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;

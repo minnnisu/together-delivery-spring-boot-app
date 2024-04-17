@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.constant.MealCategoryCode;
 import org.minnnisu.togetherdelivery.domain.Post;
+import org.minnnisu.togetherdelivery.domain.PostImage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +28,9 @@ public class PostSaveResponseDto {
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<PostSaveImageDto> postImages;
 
-    public static PostSaveResponseDto fromEntity(Post post){
+    public static PostSaveResponseDto fromEntity(Post post, List<PostImage> postImages){
         return PostSaveResponseDto.builder()
                 .id(post.getId())
                 .username(post.getUser().getUsername())
@@ -41,6 +44,7 @@ public class PostSaveResponseDto {
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .postImages(postImages.stream().map(PostSaveImageDto::fromEntity).toList())
                 .build();
     }
 }
