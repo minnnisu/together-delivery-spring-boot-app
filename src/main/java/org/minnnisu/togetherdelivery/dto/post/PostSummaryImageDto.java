@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.minnnisu.togetherdelivery.domain.Post;
 import org.minnnisu.togetherdelivery.domain.PostImage;
 
 import java.time.LocalDateTime;
@@ -13,15 +12,15 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class PostSaveImageDto {
+public class PostSummaryImageDto {
     private Long id;
 
     private String imageName;
 
     private LocalDateTime createdAt;
 
-    public static PostSaveImageDto fromEntity(PostImage postImage){
-        return PostSaveImageDto.builder()
+    public static PostSummaryImageDto fromEntity(PostImage postImage){
+        return PostSummaryImageDto.builder()
                 .id(postImage.getId())
                 .imageName(postImage.getImageName())
                 .createdAt(postImage.getCreatedAt())

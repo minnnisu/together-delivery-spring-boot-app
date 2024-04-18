@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.domain.Post;
+import org.minnnisu.togetherdelivery.domain.PostImage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +27,8 @@ public class PostDetailResponseDto {
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public static PostDetailResponseDto fromEntity(Post post){
+    private List<PostSummaryImageDto> images;
+    public static PostDetailResponseDto fromEntity(Post post, List<PostImage> images){
         return PostDetailResponseDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
@@ -40,6 +42,7 @@ public class PostDetailResponseDto {
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .images(images.stream().map(PostSummaryImageDto::fromEntity).toList())
                 .build();
     }
 }

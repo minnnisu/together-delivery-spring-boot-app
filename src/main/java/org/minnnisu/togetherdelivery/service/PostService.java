@@ -45,8 +45,9 @@ public class PostService{
 
     public PostDetailResponseDto getPostDetail(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
-        return PostDetailResponseDto.fromEntity(post);
+        List<PostImage> postImages = postImageRepository.findPostImageByPost(post);
 
+        return PostDetailResponseDto.fromEntity(post, postImages);
     }
 
     public PostSaveResponseDto savePost(User user, PostSaveRequestDto postSaveRequestDto, List<MultipartFile> files) {
