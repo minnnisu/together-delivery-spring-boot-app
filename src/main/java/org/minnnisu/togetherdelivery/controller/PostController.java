@@ -31,7 +31,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable Long id) {
+    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long id) {
         PostDetailResponseDto responseDto = postService.getPostDetail(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -39,8 +39,8 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostSaveResponseDto> savePost(
             @AuthenticationPrincipal User user,
-            @Valid @RequestPart PostSaveRequestDto post,
-            @RequestPart(required = false) List<MultipartFile> files
+            @Valid @RequestPart(name = "post") PostSaveRequestDto post,
+            @RequestPart(name = "files", required = false) List<MultipartFile> files
     ) {
         PostSaveResponseDto responseDto = postService.savePost(user, post, files);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
