@@ -14,15 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PostListResponseDto {
-    private int totalPage;
-    private int currentPage;
-    private List<PostDto> posts;
+    private PostListMetaData metaData;
+    private List<PostSummaryDto> posts;
 
     public static PostListResponseDto fromPage(Page<Post> postPage){
         return PostListResponseDto.builder()
-                .totalPage(postPage.getTotalPages())
-                .currentPage(postPage.getNumber())
-                .posts(postPage.map(PostDto::fromEntity).toList())
+                .metaData(PostListMetaData.of(postPage.getTotalPages(), postPage.getNumber()))
+                .posts(postPage.map(PostSummaryDto::fromEntity).toList())
                 .build();
     }
 }

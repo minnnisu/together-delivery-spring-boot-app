@@ -2,6 +2,7 @@ package org.minnnisu.togetherdelivery.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -38,6 +39,10 @@ public class Post {
     private int minOrderFee;
 
     private String location;
+
+    @ColumnDefault("false")
+    @Builder.Default()
+    private boolean status = false;
 
     @CreatedDate
     private LocalDateTime createdAt;

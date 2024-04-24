@@ -6,6 +6,7 @@ import org.minnnisu.togetherdelivery.filter.JwtAuthenticationFilter;
 import org.minnnisu.togetherdelivery.handler.LoginFailureHandler;
 import org.minnnisu.togetherdelivery.handler.LoginSuccessHandler;
 import org.minnnisu.togetherdelivery.provider.JwtTokenProvider;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -60,19 +61,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers((headerConfig) ->
                         headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable
                         )
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorizeRequests) ->
+                .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/auth/**","/api/**").permitAll()
+                                .requestMatchers("/", "/auth/**","/api/**","/h2-console/", "/images/** ").permitAll()
                                 .anyRequest().authenticated()
                 )
+//                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll())
                 .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customJsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;

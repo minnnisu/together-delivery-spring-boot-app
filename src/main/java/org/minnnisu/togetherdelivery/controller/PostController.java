@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,13 +25,13 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false, defaultValue = "0") int page){
+    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false, defaultValue = "1") int page){
         PostListResponseDto responseDto = postService.getPost(page);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable Long id){
+    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable Long id) {
         PostDetailResponseDto responseDto = postService.getPostDetail(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -36,9 +39,10 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostSaveResponseDto> savePost(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody PostSaveRequestDto postSaveRequestDto
+            @Valid @RequestPart PostSaveRequestDto post,
+            @RequestPart(required = false) List<MultipartFile> files
     ) {
-        PostSaveResponseDto responseDto = postService.savePost(user, postSaveRequestDto);
+        PostSaveResponseDto responseDto = postService.savePost(user, post, files);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }

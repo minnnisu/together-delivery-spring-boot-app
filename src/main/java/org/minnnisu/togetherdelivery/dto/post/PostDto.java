@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostDto {
     private Long id;
-    private String username;
+    private String nickname;
     private String title;
     private String content;
     private String restaurantName;
@@ -22,13 +22,14 @@ public class PostDto {
     private int deliveryFee;
     private int minOrderFee;
     private String location;
+    private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public static PostDto fromEntity(Post post){
         return PostDto.builder()
                 .id(post.getId())
-                .username(post.getUser().getUsername())
+                .nickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .restaurantName(post.getRestaurantName())
@@ -36,6 +37,7 @@ public class PostDto {
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
                 .location(post.getLocation())
+                .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();

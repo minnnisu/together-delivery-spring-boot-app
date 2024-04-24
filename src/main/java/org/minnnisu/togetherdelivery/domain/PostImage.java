@@ -29,4 +29,11 @@ public class PostImage {
     private LocalDateTime createdAt;
 
     private LocalDateTime deletedAt;
+
+    public static PostImage of(Post post, String imageName){
+        return PostImage.builder()
+                .post(post)
+                .imageName(imageName)
+                .build();
+    }
 }

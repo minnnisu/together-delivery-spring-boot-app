@@ -1,6 +1,6 @@
 logging:
   level:
-    root: info
+    root: debug
 
 spring:
   mvc:
@@ -50,6 +50,7 @@ jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
   access:
     expiration: 600000
+#    expiration:   10000
     header: Authorization
 
   refresh:
