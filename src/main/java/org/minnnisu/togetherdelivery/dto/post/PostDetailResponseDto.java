@@ -23,7 +23,7 @@ public class PostDetailResponseDto {
     private String categoryCode;
     private int deliveryFee;
     private int minOrderFee;
-    private String location;
+    private PostLocationDto meetLocation;
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -38,7 +38,7 @@ public class PostDetailResponseDto {
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
-                .location(post.getLocation())
+                .meetLocation(PostLocationDto.fromEntity(post))
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

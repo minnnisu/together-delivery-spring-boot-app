@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.constant.UploadPathType;
-import org.minnnisu.togetherdelivery.domain.Category;
-import org.minnnisu.togetherdelivery.domain.Post;
-import org.minnnisu.togetherdelivery.domain.PostImage;
-import org.minnnisu.togetherdelivery.domain.User;
+import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.post.PostDetailResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.CategoryRepository;
+import org.minnnisu.togetherdelivery.repository.LocationRepository;
 import org.minnnisu.togetherdelivery.repository.PostImageRepository;
 import org.minnnisu.togetherdelivery.repository.PostRepository;
 import org.springframework.data.domain.Page;
@@ -34,6 +32,7 @@ public class PostService{
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final LocationRepository locationRepository;
     private final PostImageRepository postImageRepository;
 
     private final int PAGE_SIZE = 10;
@@ -61,7 +60,9 @@ public class PostService{
         Category category = categoryRepository.findByCategoryCode(postSaveRequestDto.getCategoryCode())
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCategoryError));
 
-        Post post = postRepository.save(Post.of(postSaveRequestDto, user, category));
+        Location location = locationRepository.save(Location.fromDto(postSaveRequestDto));
+
+        Post post = postRepository.save(Post.of(postSaveRequestDto, user, category, location));
 
         if (files != null) {
             for (MultipartFile file : files) {
