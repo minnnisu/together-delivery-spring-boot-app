@@ -16,11 +16,11 @@ import org.minnnisu.togetherdelivery.repository.PostImageRepository;
 import org.minnnisu.togetherdelivery.repository.PostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,8 @@ public class PostService{
     private final int PAGE_SIZE = 10;
 
     public PostListResponseDto getPost(int pageNo) {
-        Page<Post> post = postRepository.findAll(PageRequest.of(pageNo - 1, PAGE_SIZE));
+        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Post> post = postRepository.findAll(pageable);
         return PostListResponseDto.fromPage(post);
     }
 
