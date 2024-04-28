@@ -41,9 +41,9 @@ public class Post {
 
     private int minOrderFee;
 
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     @Builder.Default()
-    private boolean status = false;
+    private boolean status = true;
 
     @CreatedDate
     private LocalDateTime createdAt;
