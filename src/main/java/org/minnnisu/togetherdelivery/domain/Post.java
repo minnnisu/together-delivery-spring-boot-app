@@ -34,11 +34,12 @@ public class Post {
     @ManyToOne
     private Category category;
 
+    @OneToOne
+    private Location meetLocation;
+
     private int deliveryFee;
 
     private int minOrderFee;
-
-    private String location;
 
     @ColumnDefault("false")
     @Builder.Default()
@@ -52,16 +53,16 @@ public class Post {
 
     private LocalDateTime deletedAt;
 
-    public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category) {
+    public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category, Location meetLocation) {
         return Post.builder()
                 .user(user)
                 .title(postSaveRequestDto.getTitle())
                 .content(postSaveRequestDto.getContent())
                 .restaurantName(postSaveRequestDto.getRestaurantName())
+                .meetLocation(meetLocation)
                 .category(category)
                 .deliveryFee(postSaveRequestDto.getDeliveryFee())
                 .minOrderFee(postSaveRequestDto.getMinOrderFee())
-                .location(postSaveRequestDto.getLocation())
                 .build();
     }
 }

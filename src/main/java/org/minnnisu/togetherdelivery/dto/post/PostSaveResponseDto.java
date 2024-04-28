@@ -23,13 +23,13 @@ public class PostSaveResponseDto {
     private String categoryCode;
     private int deliveryFee;
     private int minOrderFee;
-    private String location;
+    private PostLocationDto meetLocation;
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<PostSummaryImageDto> postImages;
 
-    public static PostSaveResponseDto fromEntity(Post post, List<PostImage> postImages){
+    public static PostSaveResponseDto fromEntity(Post post, List<PostImage> postImages) {
         return PostSaveResponseDto.builder()
                 .id(post.getId())
                 .username(post.getUser().getUsername())
@@ -39,7 +39,9 @@ public class PostSaveResponseDto {
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
-                .location(post.getLocation())
+                .meetLocation(
+                        PostLocationDto.fromEntity(post)
+                )
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

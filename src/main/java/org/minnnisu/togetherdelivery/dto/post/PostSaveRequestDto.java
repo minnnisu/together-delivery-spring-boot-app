@@ -31,6 +31,6 @@ public class PostSaveRequestDto {
     @Max(value = 100000, message = "TooHighMinOrderFeeError")
     private int minOrderFee;
 
-    @NotBlank
-    private String location;
+    private PostLocationDto meetLocation;
+
 }
