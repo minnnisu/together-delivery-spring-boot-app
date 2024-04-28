@@ -37,6 +37,9 @@ public class Comment {
 
     private LocalDateTime deletedAt;
 
+    public void update(String content){
+        this.content = content;
+    }
 
     public static Comment of(Post post, User user, String content) {
         return Comment.builder()

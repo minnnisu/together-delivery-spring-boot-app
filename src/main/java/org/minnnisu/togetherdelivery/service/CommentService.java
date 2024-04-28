@@ -8,6 +8,8 @@ import org.minnnisu.togetherdelivery.domain.Post;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.comment.CommentSaveRequestDto;
 import org.minnnisu.togetherdelivery.dto.comment.CommentSaveResponseDto;
+import org.minnnisu.togetherdelivery.dto.comment.CommentUpdateRequestDto;
+import org.minnnisu.togetherdelivery.dto.comment.CommentUpdateResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.CommentRepository;
 import org.minnnisu.togetherdelivery.repository.PostRepository;
@@ -28,8 +30,25 @@ public class CommentService {
             throw new CustomErrorException(ErrorCode.UserNotFoundError);
         }
 
-        Post post = postRepository.findById(commentSaveRequestDto.getPostId()).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+        Post post = postRepository.findById(commentSaveRequestDto.getPostId()).
+                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+
         Comment comment = commentRepository.save(Comment.of(post, user, commentSaveRequestDto.getContent()));
         return CommentSaveResponseDto.fromEntity(comment);
+    }
+
+    public CommentUpdateResponseDto updateComment(User user, CommentUpdateRequestDto commentUpdateRequestDto) {
+        if (user == null) {
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+        }
+
+        Comment comment = commentRepository.findById(commentUpdateRequestDto.getCommentId()).
+                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCommentError));
+
+        if (!comment.getUser().getUsername().equals(user.getUsername())) throw new CustomErrorException(ErrorCode.NotTheAuthorOfTheComment);
+
+        comment.update(commentUpdateRequestDto.getContent());
+
+        return CommentUpdateResponseDto.fromEntity(comment);
     }
 }
