@@ -36,4 +36,13 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+
+    public static Comment of(Post post, User user, String content) {
+        return Comment.builder()
+                .post(post)
+                .user(user)
+                .content(content)
+                .build();
+    }
 }
