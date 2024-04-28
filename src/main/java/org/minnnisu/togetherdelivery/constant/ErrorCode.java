@@ -85,11 +85,15 @@ public enum ErrorCode {
     SizeLimitExceededError(
             HttpStatus.BAD_REQUEST, "업로드 가능한 파일 크기보다 큽니다."
     ),
+
+    // ---- Comment ----
     NoSuchCommentError(
             HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."
     ),
     NotTheAuthorOfTheComment(
             HttpStatus.UNAUTHORIZED, "댓글의 작성자가 아닙니다."
+    ), DeletedCommentError(
+            HttpStatus.NOT_FOUND, "삭제된 댓글입니다"
     );
 
 

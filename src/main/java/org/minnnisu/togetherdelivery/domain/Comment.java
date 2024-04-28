@@ -41,6 +41,12 @@ public class Comment {
         this.content = content;
     }
 
+    public void delete(){
+        this.user = null;
+        this.content = "삭제된 댓글입니다.";
+        this.deletedAt = LocalDateTime.now();
+    }
+
     public static Comment of(Post post, User user, String content) {
         return Comment.builder()
                 .post(post)

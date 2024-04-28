@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class CommentUpdateResponseDto {
+public class CommentDto {
     private Long commentId;
 
     private Long postId;
@@ -21,15 +21,21 @@ public class CommentUpdateResponseDto {
 
     private String content;
 
+    private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
-    public static CommentUpdateResponseDto fromEntity(Comment comment) {
-        return CommentUpdateResponseDto.builder()
+    private LocalDateTime deletedAt;
+
+    public static CommentDto fromEntity(Comment comment) {
+        return CommentDto.builder()
                 .commentId(comment.getId())
                 .postId(comment.getPost().getId())
-                .creator(comment.getUser().getNickname())
+                .creator(comment.getDeletedAt() == null ? comment.getUser().getNickname() : "알 수 없음")
                 .content(comment.getContent())
-                .updatedAt(comment.getCreatedAt())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .deletedAt(comment.getDeletedAt())
                 .build();
     }
 }

@@ -12,24 +12,18 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class CommentUpdateResponseDto {
+public class CommentDeleteResponseDto {
     private Long commentId;
 
     private Long postId;
 
-    private String creator;
+    private LocalDateTime deletedAt;
 
-    private String content;
-
-    private LocalDateTime updatedAt;
-
-    public static CommentUpdateResponseDto fromEntity(Comment comment) {
-        return CommentUpdateResponseDto.builder()
+    public static CommentDeleteResponseDto fromEntity(Comment comment) {
+        return CommentDeleteResponseDto.builder()
                 .commentId(comment.getId())
                 .postId(comment.getPost().getId())
-                .creator(comment.getUser().getNickname())
-                .content(comment.getContent())
-                .updatedAt(comment.getCreatedAt())
+                .deletedAt(comment.getDeletedAt())
                 .build();
     }
 }
