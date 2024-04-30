@@ -3,6 +3,7 @@ package org.minnnisu.togetherdelivery.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.minnnisu.togetherdelivery.domain.User;
+import org.minnnisu.togetherdelivery.dto.comment.CommentResponseDto;
 import org.minnnisu.togetherdelivery.dto.reply.*;
 import org.minnnisu.togetherdelivery.service.ReplyService;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/reply")
 public class ReplyController {
     private final ReplyService replyService;
+
+    @GetMapping()
+    public ResponseEntity<ReplyListResponseDto> getCommentList(@RequestParam("page") int page, @RequestParam("id") Long commentId) {
+        ReplyListResponseDto replyListResponseDto = replyService.getReplyList(page, commentId);
+        return new ResponseEntity<>(replyListResponseDto, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<ReplySaveResponseDto> saveReply(@AuthenticationPrincipal User user,

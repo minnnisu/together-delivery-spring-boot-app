@@ -4,26 +4,44 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.Comment;
+import org.minnnisu.togetherdelivery.domain.Post;
 import org.minnnisu.togetherdelivery.domain.Reply;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.comment.CommentDeleteResponseDto;
-import org.minnnisu.togetherdelivery.dto.comment.CommentUpdateResponseDto;
+import org.minnnisu.togetherdelivery.dto.comment.*;
 import org.minnnisu.togetherdelivery.dto.reply.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.CommentRepository;
 import org.minnnisu.togetherdelivery.repository.ReplyRepository;
 import org.minnnisu.togetherdelivery.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ReplyService {
-    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
+
+    private final int REPLY_PAGE_SIZE = 5;
+
+    public ReplyListResponseDto getReplyList(int page, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).
+                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCommentError));
+
+        Pageable replyPageable = PageRequest.of(page - 1, REPLY_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+
+        Page<Reply> replyPage = replyRepository.findAllByComment(comment, replyPageable);
+
+        return  ReplyListResponseDto.fromPage(replyPage);
+    }
 
     public ReplySaveResponseDto saveReply(User user, ReplySaveRequestDto replySaveRequestDto) {
         if (user == null) {
