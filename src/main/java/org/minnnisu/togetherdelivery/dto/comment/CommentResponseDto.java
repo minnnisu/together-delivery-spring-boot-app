@@ -15,12 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentResponseDto {
     private CommentListMetaData metaData;
-    private List<CommentDto> comments;
+    private List<CommentListItemDto> comments;
 
-    public static CommentResponseDto fromPage(Page<Comment> page){
+    public static CommentResponseDto of(CommentListMetaData commentListMetaData, List<CommentListItemDto> comments){
         return CommentResponseDto.builder()
-                .metaData(CommentListMetaData.of(page.getTotalPages(), page.getNumber()))
-                .comments(page.map(CommentDto::fromEntity).toList())
+                .metaData(commentListMetaData)
+                .comments(comments)
                 .build();
     }
 }

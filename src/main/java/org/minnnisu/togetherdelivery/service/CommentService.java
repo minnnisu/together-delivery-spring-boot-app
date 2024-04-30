@@ -11,6 +11,7 @@ import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.CommentRepository;
 import org.minnnisu.togetherdelivery.repository.PostRepository;
+import org.minnnisu.togetherdelivery.repository.ReplyRepository;
 import org.minnnisu.togetherdelivery.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,24 @@ import java.util.List;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final int PAGE_SIZE = 10;
+    private final ReplyRepository replyRepository;
+
+    private final int COMMENT_PAGE_SIZE = 10;
+    private final int REPLY_PAGE_SIZE = 5;
+
+    public CommentResponseDto getCommentList(int pageNo, Long postId) {
+        Post post = postRepository.findById(postId).
+                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+
+        Pageable commentPageable = PageRequest.of(pageNo - 1, COMMENT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+        Pageable replyPageable = PageRequest.of(0, REPLY_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+
+        Page<Comment> commentPage = commentRepository.findAllByPost(post, commentPageable);
+        CommentListMetaData commentListMetaData = CommentListMetaData.of(commentPage.getTotalPages(), commentPage.getNumber());
+        List<CommentListItemDto> commentList = commentPage.map(comment -> CommentListItemDto.of(comment, replyRepository.findAllByComment(comment, replyPageable))).toList();
+
+        return  CommentResponseDto.of(commentListMetaData, commentList);
+    }
 
     public CommentSaveResponseDto saveComment(User user, CommentSaveRequestDto commentSaveRequestDto) {
         if (user == null) {
@@ -78,14 +96,5 @@ public class CommentService {
         comment.delete();
 
         return CommentDeleteResponseDto.fromEntity(comment);
-    }
-
-    public CommentResponseDto getCommentList(int pageNo, Long postId) {
-        Post post = postRepository.findById(postId).
-                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
-
-        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
-        Page<Comment> page = commentRepository.findAllByPost(post, pageable);
-        return CommentResponseDto.fromPage(page);
     }
 }
