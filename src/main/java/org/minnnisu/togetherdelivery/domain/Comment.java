@@ -39,6 +39,7 @@ public class Comment {
 
     public void update(String content){
         this.content = content;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void delete(){

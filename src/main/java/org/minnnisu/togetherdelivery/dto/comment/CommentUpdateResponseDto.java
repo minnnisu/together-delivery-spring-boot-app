@@ -29,7 +29,7 @@ public class CommentUpdateResponseDto {
                 .postId(comment.getPost().getId())
                 .creator(comment.getUser().getNickname())
                 .content(comment.getContent())
-                .updatedAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 }
