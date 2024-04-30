@@ -35,7 +35,7 @@ public class PostService{
     private final LocationRepository locationRepository;
     private final PostImageRepository postImageRepository;
 
-    private final int PAGE_SIZE = 5;
+    private final int PAGE_SIZE = 10;
 
     public PostListResponseDto getPost(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt"));
