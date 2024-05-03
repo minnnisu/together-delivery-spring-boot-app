@@ -20,8 +20,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping()
-    public ResponseEntity<CommentResponseDto> getCommentList(@RequestParam("page") int page, @RequestParam("id") Long postId) {
-        CommentResponseDto commentResponseDto = commentService.getCommentList(page, postId);
+    public ResponseEntity<CommentResponseDto> getCommentList(@RequestParam(value = "cursor", required = false) Long cursor, @RequestParam("postId") Long postId) {
+        CommentResponseDto commentResponseDto = commentService.getCommentList(cursor, postId);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 

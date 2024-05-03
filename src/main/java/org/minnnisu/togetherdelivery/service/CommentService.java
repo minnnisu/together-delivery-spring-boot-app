@@ -34,18 +34,27 @@ public class CommentService {
     private final int COMMENT_PAGE_SIZE = 10;
     private final int REPLY_PAGE_SIZE = 5;
 
-    public CommentResponseDto getCommentList(int pageNo, Long postId) {
-        Post post = postRepository.findById(postId).
-                orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+    public CommentResponseDto getCommentList(Long cursor, Long postId) {
+        Page<Comment> commentPage;
 
-        Pageable commentPageable = PageRequest.of(pageNo - 1, COMMENT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+
+        Pageable commentPageable = PageRequest.of(0, COMMENT_PAGE_SIZE);
+
+        if(cursor != null) {
+            Comment comment = commentRepository.findById(cursor)
+                    .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCommentError));
+            commentPage = commentRepository.getCommentsByCursor(post, comment.getId(), comment.getCreatedAt(), commentPageable);
+        }else {
+            commentPage = commentRepository.findAllByPost(post, commentPageable);
+        }
+
+
         Pageable replyPageable = PageRequest.of(0, REPLY_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+        List<CommentListItemDto> commentList = commentPage.map(comment1 -> CommentListItemDto.of(comment1, replyRepository.findAllByComment(comment1, replyPageable))).toList();
 
-        Page<Comment> commentPage = commentRepository.findAllByPost(post, commentPageable);
-        CommentListMetaData commentListMetaData = CommentListMetaData.of(commentPage.getTotalPages(), commentPage.getNumber());
-        List<CommentListItemDto> commentList = commentPage.map(comment -> CommentListItemDto.of(comment, replyRepository.findAllByComment(comment, replyPageable))).toList();
-
-        return  CommentResponseDto.of(commentListMetaData, commentList);
+        return CommentResponseDto.of(commentList);
     }
 
     public CommentSaveResponseDto saveComment(User user, CommentSaveRequestDto commentSaveRequestDto) {

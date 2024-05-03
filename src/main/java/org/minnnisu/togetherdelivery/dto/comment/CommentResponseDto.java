@@ -14,12 +14,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CommentResponseDto {
-    private CommentListMetaData metaData;
     private List<CommentListItemDto> comments;
 
-    public static CommentResponseDto of(CommentListMetaData commentListMetaData, List<CommentListItemDto> comments){
+    public static CommentResponseDto of(List<CommentListItemDto> comments){
         return CommentResponseDto.builder()
-                .metaData(commentListMetaData)
                 .comments(comments)
                 .build();
     }
