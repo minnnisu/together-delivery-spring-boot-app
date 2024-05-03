@@ -32,20 +32,12 @@ public class ReplyService {
 
     private final int REPLY_PAGE_SIZE = 5;
 
-    public ReplyListResponseDto getReplyList(Long replyId, Long commentId) {
+    public ReplyListResponseDto getReplyList(Long cursor, Long commentId) {
         Comment comment = commentRepository.findById(commentId).
                 orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCommentError));
 
-        /*
-        replyId가 존재할 경우
-        replyId에 해당하는 createdAt 추출
-        replyId, commentId, createdAt(오름차순)을 기반으로 현재 커서 이후의 REPLY_PAGE_SIZE 만큼의 데이터 응답한다.
-
-        commentId = :commentId AND ((replyId > :replyId AND createdAt = :createdAt) OR createdAt > :createdAt)
-        */
-
-        if(replyId != null) {
-            Reply reply = replyRepository.findById(replyId).
+        if(cursor != null) {
+            Reply reply = replyRepository.findById(cursor).
                     orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchReplyError));
 
             Pageable replyPageable = PageRequest.of(0, REPLY_PAGE_SIZE);
@@ -59,12 +51,7 @@ public class ReplyService {
             return  ReplyListResponseDto.fromPage(replyPage);
         }
     }
-
-
-
-
-
-
+    
     public ReplySaveResponseDto saveReply(User user, ReplySaveRequestDto replySaveRequestDto) {
         if (user == null) {
             throw new CustomErrorException(ErrorCode.UserNotFoundError);

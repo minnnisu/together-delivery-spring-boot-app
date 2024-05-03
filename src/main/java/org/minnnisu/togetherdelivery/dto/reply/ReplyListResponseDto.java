@@ -15,12 +15,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class ReplyListResponseDto {
-    private ReplyListMetaData metaData;
     private List<ReplyDto> replies;
 
     public static ReplyListResponseDto fromPage(Page<Reply> page){
         return ReplyListResponseDto.builder()
-                .metaData(ReplyListMetaData.of(page.getTotalPages(), page.getNumber()))
                 .replies(page.map(ReplyDto::fromEntity).toList())
                 .build();
     }

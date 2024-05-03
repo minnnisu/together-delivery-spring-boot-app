@@ -18,8 +18,8 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping()
-    public ResponseEntity<ReplyListResponseDto> getReplyList(@RequestParam(value = "cursor", required = false) Long replyId, @RequestParam("id") Long commentId) {
-        ReplyListResponseDto replyListResponseDto = replyService.getReplyList(replyId, commentId);
+    public ResponseEntity<ReplyListResponseDto> getReplyList(@RequestParam(value = "cursor", required = false) Long cursor, @RequestParam("commentId") Long commentId) {
+        ReplyListResponseDto replyListResponseDto = replyService.getReplyList(cursor, commentId);
         return new ResponseEntity<>(replyListResponseDto, HttpStatus.OK);
     }
 
