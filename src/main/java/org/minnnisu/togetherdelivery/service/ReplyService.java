@@ -32,16 +32,38 @@ public class ReplyService {
 
     private final int REPLY_PAGE_SIZE = 5;
 
-    public ReplyListResponseDto getReplyList(int page, Long commentId) {
+    public ReplyListResponseDto getReplyList(Long replyId, Long commentId) {
         Comment comment = commentRepository.findById(commentId).
                 orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCommentError));
 
-        Pageable replyPageable = PageRequest.of(page - 1, REPLY_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+        /*
+        replyId가 존재할 경우
+        replyId에 해당하는 createdAt 추출
+        replyId, commentId, createdAt(오름차순)을 기반으로 현재 커서 이후의 REPLY_PAGE_SIZE 만큼의 데이터 응답한다.
 
-        Page<Reply> replyPage = replyRepository.findAllByComment(comment, replyPageable);
+        commentId = :commentId AND ((replyId > :replyId AND createdAt = :createdAt) OR createdAt > :createdAt)
+        */
 
-        return  ReplyListResponseDto.fromPage(replyPage);
+        if(replyId != null) {
+            Reply reply = replyRepository.findById(replyId).
+                    orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchReplyError));
+
+            Pageable replyPageable = PageRequest.of(0, REPLY_PAGE_SIZE);
+            Page<Reply> replyPage = replyRepository.getRepliesByCursor(comment, reply.getId(), reply.getCreatedAt(), replyPageable);
+
+            return  ReplyListResponseDto.fromPage(replyPage);
+        }else{
+            Pageable replyPageable = PageRequest.of(0, REPLY_PAGE_SIZE, Sort.by(Sort.Direction.ASC, "createdAt"));
+            Page<Reply> replyPage = replyRepository.findAllByComment(comment, replyPageable);
+
+            return  ReplyListResponseDto.fromPage(replyPage);
+        }
     }
+
+
+
+
+
 
     public ReplySaveResponseDto saveReply(User user, ReplySaveRequestDto replySaveRequestDto) {
         if (user == null) {

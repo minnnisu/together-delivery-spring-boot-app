@@ -18,8 +18,8 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping()
-    public ResponseEntity<ReplyListResponseDto> getCommentList(@RequestParam("page") int page, @RequestParam("id") Long commentId) {
-        ReplyListResponseDto replyListResponseDto = replyService.getReplyList(page, commentId);
+    public ResponseEntity<ReplyListResponseDto> getReplyList(@RequestParam(value = "cursor", required = false) Long replyId, @RequestParam("id") Long commentId) {
+        ReplyListResponseDto replyListResponseDto = replyService.getReplyList(replyId, commentId);
         return new ResponseEntity<>(replyListResponseDto, HttpStatus.OK);
     }
 
@@ -38,7 +38,7 @@ public class ReplyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ReplyDeleteResponseDto> deleteComment(@AuthenticationPrincipal User user,
+    public ResponseEntity<ReplyDeleteResponseDto> deleteReply(@AuthenticationPrincipal User user,
                                                                 @PathVariable("id") Long replyId
     ){
         ReplyDeleteResponseDto replyDeleteResponseDto = replyService.deleteReply(user, replyId);
