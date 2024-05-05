@@ -36,4 +36,23 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public void update(String content){
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void delete(){
+        this.user = null;
+        this.content = "삭제된 댓글입니다.";
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public static Comment of(Post post, User user, String content) {
+        return Comment.builder()
+                .post(post)
+                .user(user)
+                .content(content)
+                .build();
+    }
 }

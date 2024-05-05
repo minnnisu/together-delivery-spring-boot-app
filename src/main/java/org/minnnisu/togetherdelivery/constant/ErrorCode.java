@@ -7,20 +7,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
+    // ----- Common ------
     NotValidRequestError(
             HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."
-    ),
-    DuplicatedUsernameError(
-            HttpStatus.CONFLICT, "중복된 아이디입니다."
-    ),
-    DuplicatedNicknameError(
-            HttpStatus.CONFLICT, "중복된 닉네임입니다"
-    ),
-    NotEqualPasswordAndPasswordCheck(
-            HttpStatus.BAD_REQUEST, "패스워드와 패스워드 재입력이 일치하지 않습니다."
-    ),
-    UserNotFoundError(
-            HttpStatus.NOT_FOUND, "유저 정보를 찾을 수 없습니다."
     ),
     QueryParamTypeMismatchError(
             HttpStatus.BAD_REQUEST, "해당 쿼리 파라미터의 타입이 올바르지 않습니다."
@@ -34,6 +23,22 @@ public enum ErrorCode {
     InternalServerError(
             HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생하였습니다. 문제가 지속되면 관리자에게 문의하세요."
     ),
+
+    // ----- User ------
+    DuplicatedUsernameError(
+            HttpStatus.CONFLICT, "중복된 아이디입니다."
+    ),
+    DuplicatedNicknameError(
+            HttpStatus.CONFLICT, "중복된 닉네임입니다"
+    ),
+    NotEqualPasswordAndPasswordCheck(
+            HttpStatus.BAD_REQUEST, "패스워드와 패스워드 재입력이 일치하지 않습니다."
+    ),
+    UserNotFoundError(
+            HttpStatus.NOT_FOUND, "유저 정보를 찾을 수 없습니다."
+    ),
+
+    // ----- Token ------
     NotValidAccessTokenError(
             HttpStatus.UNAUTHORIZED, "유효하지 않은 AccessToken입니다."
     ),
@@ -64,7 +69,6 @@ public enum ErrorCode {
             HttpStatus.BAD_REQUEST, "존재하지 않은 카테고리입니다."
     ),
 
-
     // ----- Post -----
     NoSuchPostError(
             HttpStatus.NOT_FOUND, "존재하지 않은 배달 게시물입니다."
@@ -84,9 +88,30 @@ public enum ErrorCode {
     ),
     SizeLimitExceededError(
             HttpStatus.BAD_REQUEST, "업로드 가능한 파일 크기보다 큽니다."
-    )
-    ;
+    ),
 
+    // ---- Comment ----
+    NoSuchCommentError(
+            HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."
+    ),
+    NotTheAuthorOfTheComment(
+            HttpStatus.UNAUTHORIZED, "댓글의 작성자가 아닙니다."
+    ),
+    DeletedCommentError(
+            HttpStatus.NOT_FOUND, "삭제된 댓글입니다"
+    ),
+
+    // ---- Reply ----
+    NoSuchReplyError(
+            HttpStatus.NOT_FOUND, "존재하지 않는 답글입니다."
+    ),
+    NotTheAuthorOfTheReply(
+            HttpStatus.UNAUTHORIZED, "답글의 작성자가 아닙니다."
+    ),
+    DeletedReplyError(
+            HttpStatus.NOT_FOUND, "삭제된 답글입니다"
+    ),
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;

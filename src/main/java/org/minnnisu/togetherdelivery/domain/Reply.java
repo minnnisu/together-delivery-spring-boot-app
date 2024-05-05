@@ -36,4 +36,24 @@ public class Reply {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public void update(String content){
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void delete(){
+        this.user = null;
+        this.content = "삭제된 답글입니다.";
+        this.deletedAt = LocalDateTime.now();
+    }
+
+
+    public static Reply of(Comment comment, User user, String content) {
+        return Reply.builder()
+                .comment(comment)
+                .user(user)
+                .content(content)
+                .build();
+    }
 }
