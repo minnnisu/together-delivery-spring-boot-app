@@ -6,14 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -21,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/chat/room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+
+    @GetMapping()
+    public ResponseEntity<ChatRoomListResponseDto> getChatRoomList(@AuthenticationPrincipal User user){
+        ChatRoomListResponseDto chatRoomListResponseDto = chatRoomService.getChatRoomList(user);
+        return new ResponseEntity<>(chatRoomListResponseDto, HttpStatus.OK);
+    }
 
     @PostMapping()
     public ResponseEntity<ChatRoomCreateResponseDto> createChatRoom(

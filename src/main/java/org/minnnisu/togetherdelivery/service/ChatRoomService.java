@@ -9,6 +9,7 @@ import org.minnnisu.togetherdelivery.domain.Post;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ public class ChatRoomService {
     private final PostRepository postRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
-    private final ChatMessageRepository chatMessageRepository;
 
     public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto chatRoomCreateRequestDto, User user) {
         if(user == null) {
@@ -54,5 +54,14 @@ public class ChatRoomService {
         }
 
         return ChatRoomCreateResponseDto.fromEntity(chatRoomMembers);
+    }
+
+    public ChatRoomListResponseDto getChatRoomList(User user) {
+        if(user == null) {
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+        }
+
+        List<ChatRoomMember> chatRoomMembers = chatRoomMemberRepository.findAllByUser(user);
+        return ChatRoomListResponseDto.fromEntity(chatRoomMembers);
     }
 }
