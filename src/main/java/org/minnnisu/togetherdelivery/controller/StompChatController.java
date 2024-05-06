@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ChatController {
+public class StompChatController {
     private final SimpMessageSendingOperations sendingOperations;
+
+
+
 
     @MessageMapping("/chat/message")
     public void chat(ChatMessageRequestDto message, StompPrincipal stompPrincipal) {

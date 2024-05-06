@@ -111,7 +111,11 @@ public enum ErrorCode {
     DeletedReplyError(
             HttpStatus.NOT_FOUND, "삭제된 답글입니다"
     ),
-    ;
+
+    // ---- ChatRoom ----
+    AlreadyExistChatRoomError(
+            HttpStatus.BAD_REQUEST, "이미 존재하는 채팅방입니다."
+    );
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -23,7 +23,7 @@ public class ChatMessage {
     private ChatRoom chatRoom;
 
     @ManyToOne
-    private ChatRoomPeople chatRoomPeople;
+    private ChatRoomMember chatRoomPeople;
 
     @Lob
     private String message;

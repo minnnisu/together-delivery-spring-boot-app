@@ -27,4 +27,10 @@ public class ChatRoom {
     private LocalDateTime createdAt;
 
     private LocalDateTime deletedAt;
+
+    public static ChatRoom of(Post post){
+        return ChatRoom.builder()
+                .post(post)
+                .build();
+    }
 }
