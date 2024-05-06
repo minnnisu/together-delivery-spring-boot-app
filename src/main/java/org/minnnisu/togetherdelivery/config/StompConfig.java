@@ -2,6 +2,7 @@ package org.minnnisu.togetherdelivery.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.minnnisu.togetherdelivery.handler.AssignPrincipalHandshakeHandler.AssignPrincipalHandshakeHandler;
 import org.minnnisu.togetherdelivery.handler.StompErrorHandler;
 import org.minnnisu.togetherdelivery.interceptor.JwtAuthenticationInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +20,11 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtAuthenticationInterceptor jwtAuthenticationInterceptor;
     private final StompErrorHandler stompErrorHandler;
 
+    private final AssignPrincipalHandshakeHandler assignPrincipalHandshakeHandler = new AssignPrincipalHandshakeHandler();
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*");
-
+        registry.addEndpoint("/ws/chat").setHandshakeHandler(assignPrincipalHandshakeHandler).setAllowedOriginPatterns("*");
         registry.setErrorHandler(stompErrorHandler);
     }
 
