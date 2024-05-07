@@ -115,6 +115,12 @@ public enum ErrorCode {
     // ---- ChatRoom ----
     AlreadyExistChatRoomError(
             HttpStatus.BAD_REQUEST, "이미 존재하는 채팅방입니다."
+    ),
+    NoSuchChatRoomError(
+            HttpStatus.NOT_FOUND, "존재하지 않은 채팅방입니다"
+    ),
+    AlreadyExistChatRoomMemberError(
+            HttpStatus.BAD_REQUEST, "이미 존재하는 채팅방 인원 입니다."
     );
 
     private final HttpStatus httpStatus;

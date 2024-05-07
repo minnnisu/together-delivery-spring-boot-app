@@ -7,11 +7,10 @@ import org.minnnisu.togetherdelivery.domain.ChatRoom;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 import org.minnnisu.togetherdelivery.domain.Post;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateRequestDto;
-import org.minnnisu.togetherdelivery.dto.chat.ChatRoomCreateResponseDto;
-import org.minnnisu.togetherdelivery.dto.chat.ChatRoomListResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
 
+//    TODO: 최적화
     public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto chatRoomCreateRequestDto, User user) {
         if(user == null) {
             throw new CustomErrorException(ErrorCode.UserNotFoundError);
@@ -64,4 +64,27 @@ public class ChatRoomService {
         List<ChatRoomMember> chatRoomMembers = chatRoomMemberRepository.findAllByUser(user);
         return ChatRoomListResponseDto.fromEntity(chatRoomMembers);
     }
+
+    public ChatRoomInviteResponseDto inviteMember(ChatRoomInviteRequestDto chatRoomInviteRequestDto, User user) {
+        if(user == null) {
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+        }
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomInviteRequestDto.getChatRoomId()).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
+
+        List<String> invitedMembers = chatRoomInviteRequestDto.getInvitedMembers();
+        List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
+        for (String member : invitedMembers) {
+            User foundUser = userRepository.findByNickname(member).orElseThrow(() -> new CustomErrorException(ErrorCode.UserNotFoundError));
+            Optional<ChatRoomMember> chatRoomMember = chatRoomMemberRepository.findAllByChatRoomAndUser(chatRoom, foundUser);
+            if(chatRoomMember.isPresent()){
+                throw new CustomErrorException(ErrorCode.AlreadyExistChatRoomMemberError);
+            }
+            chatRoomMembers.add(chatRoomMemberRepository.save(ChatRoomMember.of(chatRoom, foundUser)));
+        }
+
+        return ChatRoomInviteResponseDto.fromEntity(chatRoomMembers);
+    }
+
+
 }
