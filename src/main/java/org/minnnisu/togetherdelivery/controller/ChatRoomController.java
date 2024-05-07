@@ -31,7 +31,7 @@ public class ChatRoomController {
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createRoom(chatRoomCreateRequestDto, user);
         return new ResponseEntity<>(chatRoomCreateResponseDto, HttpStatus.CREATED);
     }
-    
+
     @PostMapping("/invite")
     public ResponseEntity<ChatRoomInviteResponseDto> inviteMember(
             @Valid @RequestBody ChatRoomInviteRequestDto chatRoomInviteRequestDto,
@@ -39,5 +39,14 @@ public class ChatRoomController {
     ){
         ChatRoomInviteResponseDto chatRoomInviteResponseDto = chatRoomService.inviteMember(chatRoomInviteRequestDto, user);
         return new ResponseEntity<>(chatRoomInviteResponseDto, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/exit")
+    public ResponseEntity<ChatRoomExitResponseDto> exitChatRoom(
+            @Valid @RequestBody ChatRoomExitRequestDto chatRoomExitRequestDto,
+            @AuthenticationPrincipal User user
+    ){
+        ChatRoomExitResponseDto chatRoomExitResponseDto = chatRoomService.exitChatRoom(chatRoomExitRequestDto, user);
+        return new ResponseEntity<>(chatRoomExitResponseDto, HttpStatus.CREATED);
     }
 }

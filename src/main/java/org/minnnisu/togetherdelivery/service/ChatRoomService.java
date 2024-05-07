@@ -3,10 +3,7 @@ package org.minnnisu.togetherdelivery.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
-import org.minnnisu.togetherdelivery.domain.ChatRoom;
-import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
-import org.minnnisu.togetherdelivery.domain.Post;
-import org.minnnisu.togetherdelivery.domain.User;
+import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.chat.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
@@ -25,6 +22,7 @@ public class ChatRoomService {
     private final PostRepository postRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
 //    TODO: 최적화
     public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto chatRoomCreateRequestDto, User user) {
@@ -87,4 +85,21 @@ public class ChatRoomService {
     }
 
 
+    public ChatRoomExitResponseDto exitChatRoom(ChatRoomExitRequestDto chatRoomExitRequestDto, User user) {
+        if(user == null) {
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+        }
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomExitRequestDto.getChatRoomId())
+                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
+        ChatRoomMember chatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
+                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchMemberInChatRoomError));
+        chatMessageRepository.deleteAllByChatRoomMember(chatRoomMember);
+
+
+        ChatRoomExitResponseDto chatRoomExitResponseDto = ChatRoomExitResponseDto.fromEntity(chatRoomMember);
+        chatRoomMemberRepository.delete(chatRoomMember);
+
+        return chatRoomExitResponseDto;
+    }
 }
