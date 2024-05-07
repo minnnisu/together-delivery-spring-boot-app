@@ -74,7 +74,7 @@ public class ChatRoomService {
         List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
         for (String member : invitedMembers) {
             User foundUser = userRepository.findByNickname(member).orElseThrow(() -> new CustomErrorException(ErrorCode.UserNotFoundError));
-            Optional<ChatRoomMember> chatRoomMember = chatRoomMemberRepository.findAllByChatRoomAndUser(chatRoom, foundUser);
+            Optional<ChatRoomMember> chatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, foundUser);
             if(chatRoomMember.isPresent()){
                 throw new CustomErrorException(ErrorCode.AlreadyExistChatRoomMemberError);
             }
