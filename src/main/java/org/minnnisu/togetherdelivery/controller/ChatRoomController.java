@@ -31,4 +31,13 @@ public class ChatRoomController {
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createRoom(chatRoomCreateRequestDto, user);
         return new ResponseEntity<>(chatRoomCreateResponseDto, HttpStatus.CREATED);
     }
+    
+    @PostMapping("/invite")
+    public ResponseEntity<ChatRoomInviteResponseDto> inviteMember(
+            @Valid @RequestBody ChatRoomInviteRequestDto chatRoomInviteRequestDto,
+            @AuthenticationPrincipal User user
+    ){
+        ChatRoomInviteResponseDto chatRoomInviteResponseDto = chatRoomService.inviteMember(chatRoomInviteRequestDto, user);
+        return new ResponseEntity<>(chatRoomInviteResponseDto, HttpStatus.CREATED);
+    }
 }
