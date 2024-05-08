@@ -124,6 +124,12 @@ public enum ErrorCode {
     ),
     NoSuchMemberInChatRoomError(
             HttpStatus.NOT_FOUND, "채팅방에 존재하지 않는 유저입니다."
+    ),
+    UnsupportedMessageTypeError(
+            HttpStatus.BAD_REQUEST, "지원되지 않은 메시지 타입입니다."
+    ),
+    NoSuchCHatMessageError(
+            HttpStatus.NOT_FOUND, "존재하지 않은 채팅 메시지입니다"
     );
 
     private final HttpStatus httpStatus;

@@ -94,7 +94,7 @@ public class ChatRoomService {
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
         ChatRoomMember chatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchMemberInChatRoomError));
-        chatMessageRepository.deleteAllByChatRoomMember(chatRoomMember);
+        chatMessageRepository.deleteAllBySender(chatRoomMember);
 
 
         ChatRoomExitResponseDto chatRoomExitResponseDto = ChatRoomExitResponseDto.fromEntity(chatRoomMember);
