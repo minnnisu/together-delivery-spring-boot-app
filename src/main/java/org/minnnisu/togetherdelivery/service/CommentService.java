@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.Comment;
 import org.minnnisu.togetherdelivery.domain.Post;
+import org.minnnisu.togetherdelivery.domain.Reply;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.comment.*;
 import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
@@ -20,7 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 @Slf4j
 @Service
@@ -105,5 +107,39 @@ public class CommentService {
         comment.delete();
 
         return CommentDeleteResponseDto.fromEntity(comment);
+    }
+
+    public CommentCreatorResponseDto getCommentCreators(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+
+        List<Reply> replies = new ArrayList<>();
+
+        List<Comment> comments = commentRepository.findAllByPost(post);
+        for (Comment comment : comments) {
+            replies.addAll(replyRepository.findAllByComment(comment));
+        }
+
+        comments.sort(Comparator.comparing(Comment::getCreatedAt).reversed());
+        comments = removeDuplicatedCreator(comments, comment -> comment.getUser().getId());
+
+        replies.sort(Comparator.comparing(Reply::getCreatedAt).reversed());
+        replies = removeDuplicatedCreator(replies, reply -> reply.getUser().getId());
+
+        return CommentCreatorResponseDto.fromEntity(comments, replies);
+    }
+
+    private <T> List<T> removeDuplicatedCreator(List<T> items, Function<T, Long> getUserId) {
+        List<T> uniqueItems = new ArrayList<>();
+        Set<Long> creatorIds = new HashSet<>();
+
+        for (T item : items) {
+            Long targetId = getUserId.apply(item);
+            if (!creatorIds.contains(targetId)) {
+                uniqueItems.add(item);
+                creatorIds.add(targetId);
+            }
+        }
+
+        return uniqueItems;
     }
 }

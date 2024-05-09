@@ -1,6 +1,7 @@
 package org.minnnisu.togetherdelivery.controller;
 
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -47,6 +48,12 @@ public class CommentController {
     ){
         CommentDeleteResponseDto commentDeleteResponseDto = commentService.deleteComment(user, commentId);
         return new ResponseEntity<>(commentDeleteResponseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/creators/{id}")
+    public ResponseEntity<CommentCreatorResponseDto> getCommentCreators(@PathVariable("id") Long postId) {
+        CommentCreatorResponseDto commentCreatorResponseDto = commentService.getCommentCreators(postId);
+        return new ResponseEntity<>(commentCreatorResponseDto, HttpStatus.OK);
     }
 
 }

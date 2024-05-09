@@ -16,6 +16,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findAllByPost(Post post, Pageable pageable);
 
+    List<Comment> findAllByPost(Post post);
+
     @Query("SELECT c FROM Comment c WHERE c.post = :post AND ((c.id > :commentId AND c.createdAt = :createdAt) OR c.createdAt > :createdAt)")
     Page<Comment> getCommentsByCursor(@Param("post") Post post,
                                    @Param("commentId") Long commentId,

@@ -9,9 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
     Page<Reply> findAllByComment(Comment comment, Pageable pageable);
+
+    List<Reply> findAllByComment(Comment comment);
 
     @Query("SELECT r FROM Reply r WHERE r.comment = :comment AND ((r.id > :replyId AND r.createdAt = :createdAt) OR r.createdAt > :createdAt)")
     Page<Reply> getRepliesByCursor(@Param("comment") Comment comment,
