@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 public class PostSummaryDto {
     private Long id;
     private String nickname;
-    private String title;
     private String content;
     private String categoryCode;
     private int deliveryFee;
@@ -28,14 +27,12 @@ public class PostSummaryDto {
         return PostSummaryDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
-                .title(post.getTitle())
                 .content(post.getContent())
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }

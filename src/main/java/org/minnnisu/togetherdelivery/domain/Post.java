@@ -24,11 +24,6 @@ public class Post {
     @ManyToOne
     private User user;
 
-    private String title;
-
-    @Lob
-    private String content;
-
     private String restaurantName;
 
     @ManyToOne
@@ -40,6 +35,9 @@ public class Post {
     private int deliveryFee;
 
     private int minOrderFee;
+
+    @Lob
+    private String content;
 
     @ColumnDefault("true")
     @Builder.Default()
@@ -56,7 +54,6 @@ public class Post {
     public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category, Location meetLocation) {
         return Post.builder()
                 .user(user)
-                .title(postSaveRequestDto.getTitle())
                 .content(postSaveRequestDto.getContent())
                 .restaurantName(postSaveRequestDto.getRestaurantName())
                 .meetLocation(meetLocation)

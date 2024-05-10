@@ -23,6 +23,8 @@ public class Location {
 
     private String address;
 
+    private String shortAddress;
+
     private double latitude;
 
     private double longitude;
@@ -38,6 +40,7 @@ public class Location {
     public static Location fromDto(PostSaveRequestDto postSaveRequestDto){
         return Location.builder()
                 .address(postSaveRequestDto.getMeetLocation().getAddress())
+                .shortAddress(postSaveRequestDto.getMeetLocation().getShortAddress())
                 .latitude(postSaveRequestDto.getMeetLocation().getLatitude())
                 .longitude(postSaveRequestDto.getMeetLocation().getLongitude())
                 .build();
