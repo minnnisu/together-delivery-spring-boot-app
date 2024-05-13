@@ -16,9 +16,11 @@ public class PostSummaryDto {
     private Long id;
     private String nickname;
     private String content;
+    private String restaurantName;
     private String categoryCode;
     private int deliveryFee;
     private int minOrderFee;
+    private PostLocationDto meetLocation;
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -28,9 +30,11 @@ public class PostSummaryDto {
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
                 .content(post.getContent())
+                .restaurantName(post.getRestaurantName())
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
+                .meetLocation(PostLocationDto.fromEntity(post))
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
                 .build();
