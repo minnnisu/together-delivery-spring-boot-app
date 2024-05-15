@@ -13,6 +13,7 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 public class ChatMessageOpenResponseDto extends ChatMessageResponseDto {
     public static ChatMessageOpenResponseDto fromEntity(ChatMessage chatMessage) {
         return ChatMessageOpenResponseDto.builder()
+                .message("채팅방이 생성되었습니다.")
                 .type(ChatMessageType.OPEN)
                 .sender(chatMessage.getSender().getUser().getNickname())
                 .createdAt(chatMessage.getCreatedAt())

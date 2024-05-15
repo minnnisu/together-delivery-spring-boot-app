@@ -11,9 +11,9 @@ public class ChatMessageRequestDto {
 
     private Long chatRoomId;
 
-    private Long senderUsername;
+    private String username;
 
-    private Long chatMessageId;
+    private Long deleteTargetChatMessageId;
 
     private String message;
 }

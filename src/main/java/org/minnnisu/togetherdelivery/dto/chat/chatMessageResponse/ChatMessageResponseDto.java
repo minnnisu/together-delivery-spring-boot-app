@@ -17,5 +17,7 @@ public class ChatMessageResponseDto {
 
     private String sender;
 
+    private String message;
+
     private LocalDateTime createdAt;
 }

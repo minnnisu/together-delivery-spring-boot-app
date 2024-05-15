@@ -13,6 +13,7 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 public class ChatMessageEnterResponseDto extends ChatMessageResponseDto {
     public static ChatMessageEnterResponseDto fromEntity(ChatMessage chatMessage) {
         return ChatMessageEnterResponseDto.builder()
+                .message(chatMessage.getSender().getUser().getNickname() + "님이 채팅방에 입장하였습니다.")
                 .type(ChatMessageType.ENTER)
                 .sender(chatMessage.getSender().getUser().getNickname())
                 .createdAt(chatMessage.getCreatedAt())

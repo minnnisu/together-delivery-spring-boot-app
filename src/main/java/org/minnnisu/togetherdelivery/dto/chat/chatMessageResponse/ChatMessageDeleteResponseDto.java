@@ -11,11 +11,12 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 @Setter
 @SuperBuilder
 public class ChatMessageDeleteResponseDto extends ChatMessageResponseDto {
-    private Long chatMessageId;
+    private Long deletedChatMessageId;
 
     public static ChatMessageDeleteResponseDto fromEntity(ChatMessage chatMessage) {
         return ChatMessageDeleteResponseDto.builder()
-                .chatMessageId(chatMessage.getId())
+                .message(chatMessage.getSender().getUser().getNickname() + "님의 메시지가 삭제되었습니다.")
+                .deletedChatMessageId(chatMessage.getId())
                 .type(ChatMessageType.DELETE)
                 .sender(chatMessage.getSender().getUser().getNickname())
                 .createdAt(chatMessage.getCreatedAt())

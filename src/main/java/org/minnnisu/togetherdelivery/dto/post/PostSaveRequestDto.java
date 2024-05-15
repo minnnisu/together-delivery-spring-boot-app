@@ -7,25 +7,25 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostSaveRequestDto {
-    @NotBlank
-    @Size(min = 2, max = 100, message = "TooShortOrLongContentError")
     private String content;
 
-    @NotNull
+    @NotBlank(message = "NoContentError")
+    @Size(min = 2, max = 20, message = "TooShortOrLongContentError")
     private String restaurantName;
 
-    @NotBlank
+    @NotBlank(message = "NoCategoryCodeError")
     private String categoryCode;
 
-    @NotNull
+    @NotNull(message = "NoDeliveryFeeError")
     @Min(value = 0, message = "TooLowDeliveryFeeError")
     @Max(value = 10000, message = "TooHighDeliveryFeeError")
     private int deliveryFee;
 
-    @NotNull
+    @NotNull(message = "NoMinOrderFeeError")
     @Min(value = 0, message = "TooLowMinOrderFeeError")
     @Max(value = 100000, message = "TooHighMinOrderFeeError")
     private int minOrderFee;
 
+    @NotNull(message = "NoMeetLocationError")
     private PostLocationDto meetLocation;
 }

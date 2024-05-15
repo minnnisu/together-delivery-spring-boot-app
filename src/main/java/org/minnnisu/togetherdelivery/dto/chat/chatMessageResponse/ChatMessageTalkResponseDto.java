@@ -11,10 +11,11 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 @Setter
 @SuperBuilder
 public class ChatMessageTalkResponseDto extends ChatMessageResponseDto {
-    private String message;
+    private Long chatMessageId;
 
     public static ChatMessageTalkResponseDto fromEntity(ChatMessage chatMessage) {
         return ChatMessageTalkResponseDto.builder()
+                .chatMessageId(chatMessage.getId())
                 .message(chatMessage.getMessage())
                 .type(ChatMessageType.TALK)
                 .sender(chatMessage.getSender().getUser().getNickname())

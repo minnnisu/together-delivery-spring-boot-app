@@ -32,7 +32,7 @@ public class StompChatService {
         String responsePath = "/topic/chat/room/" + chatMessageRequestDto.getChatRoomId();
         ChatMessageType chatMessageType = chatMessageRequestDto.getType();
 
-        User user = userRepository.findById(chatMessageRequestDto.getSenderUsername())
+        User user = userRepository.findByUsername(chatMessageRequestDto.getUsername())
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.UserNotFoundError));
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatMessageRequestDto.getChatRoomId())
@@ -65,7 +65,7 @@ public class StompChatService {
         }
 
         if (chatMessageType == ChatMessageType.DELETE) {
-            ChatMessage chatMessage = chatMessageRepository.findById(chatMessageRequestDto.getChatMessageId())
+            ChatMessage chatMessage = chatMessageRepository.findById(chatMessageRequestDto.getDeleteTargetChatMessageId())
                     .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCHatMessageError));
 
             ChatMessageDeleteResponseDto chatMessageDeleteResponseDto = ChatMessageDeleteResponseDto.fromEntity(chatMessage);
