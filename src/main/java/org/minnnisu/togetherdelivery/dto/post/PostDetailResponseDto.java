@@ -17,7 +17,6 @@ import java.util.List;
 public class PostDetailResponseDto {
     private Long id;
     private String nickname;
-    private String title;
     private String content;
     private String restaurantName;
     private String categoryCode;
@@ -32,7 +31,6 @@ public class PostDetailResponseDto {
         return PostDetailResponseDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
-                .title(post.getTitle())
                 .content(post.getContent())
                 .restaurantName(post.getRestaurantName())
                 .categoryCode(post.getCategory().getCategoryCode())

@@ -8,10 +8,6 @@ import lombok.Setter;
 @Setter
 public class PostSaveRequestDto {
     @NotBlank
-    @Size(min = 2, max = 20, message = "TooShortOrLongTitleError")
-    private String title;
-
-    @NotBlank
     @Size(min = 2, max = 100, message = "TooShortOrLongContentError")
     private String content;
 
@@ -32,5 +28,4 @@ public class PostSaveRequestDto {
     private int minOrderFee;
 
     private PostLocationDto meetLocation;
-
 }
