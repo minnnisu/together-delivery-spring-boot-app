@@ -10,10 +10,7 @@ import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
-import org.minnnisu.togetherdelivery.repository.CategoryRepository;
-import org.minnnisu.togetherdelivery.repository.LocationRepository;
-import org.minnnisu.togetherdelivery.repository.PostImageRepository;
-import org.minnnisu.togetherdelivery.repository.PostRepository;
+import org.minnnisu.togetherdelivery.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,6 +32,7 @@ public class PostService{
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
     private final PostImageRepository postImageRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     private final int PAGE_SIZE = 10;
 
@@ -43,11 +42,23 @@ public class PostService{
         return PostListResponseDto.fromPage(post);
     }
 
-    public PostDetailResponseDto getPostDetail(Long id) {
+    public PostDetailResponseDto getPostDetail(Long id, User user) {
+        boolean hasChatRoom = false;
+        boolean isPostCreator = false;
+
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+        if (user != null && post.getUser().getUsername().equals(user.getUsername())) {
+            isPostCreator = true;
+        }
+
         List<PostImage> postImages = postImageRepository.findPostImageByPost(post);
 
-        return PostDetailResponseDto.fromEntity(post, postImages);
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByPost(post);
+        if (chatRoom.isPresent()) {
+            hasChatRoom = true;
+        }
+
+        return PostDetailResponseDto.fromEntity(post, postImages, isPostCreator, hasChatRoom);
     }
 
     public PostSaveResponseDto savePost(User user, PostSaveRequestDto postSaveRequestDto, List<MultipartFile> files) {

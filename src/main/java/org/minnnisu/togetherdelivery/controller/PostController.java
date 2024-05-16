@@ -31,8 +31,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long id) {
-        PostDetailResponseDto responseDto = postService.getPostDetail(id);
+    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long postId,  @AuthenticationPrincipal User user) {
+        PostDetailResponseDto responseDto = postService.getPostDetail(postId, user);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

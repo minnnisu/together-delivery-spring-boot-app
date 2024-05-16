@@ -1,5 +1,6 @@
 package org.minnnisu.togetherdelivery.dto.post;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +25,15 @@ public class PostDetailResponseDto {
     private int minOrderFee;
     private PostLocationDto meetLocation;
     private boolean status;
+
+    @JsonProperty("isPostCreator")
+    private boolean isPostCreator;
+
+    private boolean hasChatRoom;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<PostSummaryImageDto> images;
-    public static PostDetailResponseDto fromEntity(Post post, List<PostImage> images){
+    public static PostDetailResponseDto fromEntity(Post post, List<PostImage> images, boolean isPostCreator, boolean hasChatRoom){
         return PostDetailResponseDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
@@ -38,6 +44,8 @@ public class PostDetailResponseDto {
                 .minOrderFee(post.getMinOrderFee())
                 .meetLocation(PostLocationDto.fromEntity(post))
                 .status(post.isStatus())
+                .isPostCreator(isPostCreator)
+                .hasChatRoom(hasChatRoom)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .images(images.stream().map(PostSummaryImageDto::fromEntity).toList())
