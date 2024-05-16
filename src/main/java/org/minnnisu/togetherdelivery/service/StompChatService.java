@@ -39,7 +39,7 @@ public class StompChatService {
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
 
         ChatRoomMember sender = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
-                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
+                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchMemberInChatRoomError));
 
 
         if (chatMessageType == ChatMessageType.OPEN) {
