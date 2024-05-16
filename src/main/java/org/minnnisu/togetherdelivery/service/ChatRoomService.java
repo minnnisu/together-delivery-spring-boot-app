@@ -1,7 +1,9 @@
 package org.minnnisu.togetherdelivery.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.chat.*;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -30,28 +33,25 @@ public class ChatRoomService {
             throw new CustomErrorException(ErrorCode.UserNotFoundError);
         }
 
-        Post post = postRepository.findById(chatRoomCreateRequestDto.getPostId()).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+        Post post = postRepository.findById(chatRoomCreateRequestDto.getPostId())
+                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
 
         Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByPost(post);
         if(chatRoomOptional.isPresent()) {
             throw new CustomErrorException(ErrorCode.AlreadyExistChatRoomError);
         }
 
-        List<String> invitedMembers = chatRoomCreateRequestDto.getMembers();
-        List<User> invitedUsers = new ArrayList<>();
-        for (String member : invitedMembers) {
-            User foundUser = userRepository.findByNickname(member).orElseThrow(() -> new CustomErrorException(ErrorCode.UserNotFoundError));
-            invitedUsers.add(foundUser);
-        }
-
         ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.of(post));
 
-        List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
-        for (User invitedUser : invitedUsers) {
-            chatRoomMembers.add(chatRoomMemberRepository.save(ChatRoomMember.of(newChatRoom, invitedUser)));
-        }
+        ChatRoomMember chatRoomCreator = chatRoomMemberRepository.save(ChatRoomMember.of(newChatRoom, user));
 
-        return ChatRoomCreateResponseDto.fromEntity(chatRoomMembers);
+        chatMessageRepository.save(
+                ChatMessage.of(
+                        chatRoomCreator,
+                        "채팅방이 생성되었습니다.",
+                        ChatMessageType.OPEN));
+
+        return ChatRoomCreateResponseDto.fromEntity(chatRoomCreator);
     }
 
     public ChatRoomListResponseDto getChatRoomList(User user) {
