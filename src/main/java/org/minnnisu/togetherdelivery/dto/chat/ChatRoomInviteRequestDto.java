@@ -11,6 +11,5 @@ import java.util.List;
 public class ChatRoomInviteRequestDto {
     private Long chatRoomId;
 
-    @ListNotEmpty(message = "EmptyInvitedMemberError")
-    private List<String> invitedMembers;
+    private String invitedMember;
 }

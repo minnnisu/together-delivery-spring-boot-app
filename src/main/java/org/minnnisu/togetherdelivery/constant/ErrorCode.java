@@ -133,6 +133,9 @@ public enum ErrorCode {
     ),
     NotIncludeChatRoomCreatorInfoError(
             HttpStatus.BAD_REQUEST, "채팅방을 생성한 유저의 정보가 없습니다."
+    ),
+    ChatInvitePermissionDeniedError(
+            HttpStatus.FORBIDDEN, "채팅방 초대 권한이 없는 멤버입니다."
     );
 
     private final HttpStatus httpStatus;

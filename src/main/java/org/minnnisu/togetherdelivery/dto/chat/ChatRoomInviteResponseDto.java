@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,14 +15,14 @@ import java.util.List;
 @Builder
 public class ChatRoomInviteResponseDto {
     private Long chatRoomId;
-    private List<String> invitedMembers;
+    private String invitedMember;
+    private LocalDateTime createdAt;
 
-    public static ChatRoomInviteResponseDto fromEntity(List<ChatRoomMember> chatRoomMembers){
-        ChatRoomMember chatRoomMember = chatRoomMembers.get(0);
-
+    public static ChatRoomInviteResponseDto fromEntity(ChatRoomMember chatRoomMember){
         return ChatRoomInviteResponseDto.builder()
                 .chatRoomId(chatRoomMember.getChatRoom().getId())
-                .invitedMembers(chatRoomMembers.stream().map(chatRoomMember1 -> chatRoomMember1.getUser().getNickname()).toList())
+                .invitedMember(chatRoomMember.getUser().getNickname())
+                .createdAt(chatRoomMember.getCreatedAt())
                 .build();
     }
 }
