@@ -10,7 +10,4 @@ import java.util.List;
 @Setter
 public class ChatRoomCreateRequestDto {
     private Long postId;
-
-    @ListNotEmpty(message = "EmptyMemberError")
-    private List<String> members;
 }

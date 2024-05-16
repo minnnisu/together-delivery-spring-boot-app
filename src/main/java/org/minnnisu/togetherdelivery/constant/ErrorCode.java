@@ -130,6 +130,9 @@ public enum ErrorCode {
     ),
     NoSuchCHatMessageError(
             HttpStatus.NOT_FOUND, "존재하지 않은 채팅 메시지입니다"
+    ),
+    NotIncludeChatRoomCreatorInfoError(
+            HttpStatus.BAD_REQUEST, "채팅방을 생성한 유저의 정보가 없습니다."
     );
 
     private final HttpStatus httpStatus;

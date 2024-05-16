@@ -17,16 +17,16 @@ import java.util.List;
 public class ChatRoomCreateResponseDto {
     private Long chatRoomId;
     private Long postId;
-    private List<String> members;
+    private String creator;
     private LocalDateTime createdAt;
 
-    public static ChatRoomCreateResponseDto fromEntity(List<ChatRoomMember> chatRoomMembers){
-        ChatRoom chatRoom = chatRoomMembers.get(0).getChatRoom();
+    public static ChatRoomCreateResponseDto fromEntity(ChatRoomMember chatRoomMember){
+        ChatRoom chatRoom = chatRoomMember.getChatRoom();
 
         return ChatRoomCreateResponseDto.builder()
                 .chatRoomId(chatRoom.getId())
                 .postId(chatRoom.getPost().getId())
-                .members(chatRoomMembers.stream().map(chatRoomMember -> chatRoomMember.getUser().getUsername()).toList())
+                .creator(chatRoomMember.getUser().getUsername())
                 .createdAt(chatRoom.getCreatedAt())
                 .build();
     }
