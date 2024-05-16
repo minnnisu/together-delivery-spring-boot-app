@@ -66,7 +66,7 @@ public class StompChatService {
 
         if (chatMessageType == ChatMessageType.DELETE) {
             ChatMessage chatMessage = chatMessageRepository.findById(chatMessageRequestDto.getDeleteTargetChatMessageId())
-                    .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCHatMessageError));
+                    .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatMessageError));
 
             ChatMessageDeleteResponseDto chatMessageDeleteResponseDto = ChatMessageDeleteResponseDto.fromEntity(chatMessage);
             chatMessageRepository.delete(chatMessage);
