@@ -27,7 +27,7 @@ public class ChatRoomService {
 
     public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto chatRoomCreateRequestDto, User user) {
         if (user == null) {
-            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+            throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
         }
 
         Post post = postRepository.findById(chatRoomCreateRequestDto.getPostId())
@@ -53,7 +53,7 @@ public class ChatRoomService {
 
     public ChatRoomListResponseDto getChatRoomList(User user) {
         if (user == null) {
-            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+            throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
         }
 
         List<ChatRoomMember> chatRoomMembers = chatRoomMemberRepository.findAllByUser(user);
@@ -62,7 +62,7 @@ public class ChatRoomService {
 
     public ChatRoomInviteResponseDto inviteMember(ChatRoomInviteRequestDto chatRoomInviteRequestDto, User user) {
         if (user == null) {
-            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+            throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
         }
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomInviteRequestDto.getChatRoomId())
@@ -86,7 +86,7 @@ public class ChatRoomService {
 
     public ChatRoomExitResponseDto exitChatRoom(ChatRoomExitRequestDto chatRoomExitRequestDto, User user) {
         if (user == null) {
-            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+            throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
         }
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomExitRequestDto.getChatRoomId())
