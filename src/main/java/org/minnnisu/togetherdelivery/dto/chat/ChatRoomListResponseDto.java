@@ -20,4 +20,10 @@ public class ChatRoomListResponseDto {
                 .chatRooms(chatRoomMembers.stream().map(ChatRoomDto::fromEntity).toList())
                 .build();
     }
+
+    public static ChatRoomListResponseDto of(List<ChatRoomDto> chatRooms) {
+        return ChatRoomListResponseDto.builder()
+                .chatRooms(chatRooms)
+                .build();
+    }
 }

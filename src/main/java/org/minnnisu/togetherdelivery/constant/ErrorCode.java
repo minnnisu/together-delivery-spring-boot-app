@@ -37,6 +37,9 @@ public enum ErrorCode {
     UserNotFoundError(
             HttpStatus.NOT_FOUND, "유저 정보를 찾을 수 없습니다."
     ),
+    UserPermissionDeniedError(
+            HttpStatus.FORBIDDEN, "권한이 없는 유저입니다."
+    ),
 
     // ----- Token ------
     NotValidAccessTokenError(

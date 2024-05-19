@@ -30,4 +30,13 @@ public class ChatRoomCreateResponseDto {
                 .createdAt(chatRoom.getCreatedAt())
                 .build();
     }
+
+    public static ChatRoomCreateResponseDto of(Long chatRoomId, long postId, String creator, LocalDateTime createdAt) {
+     return ChatRoomCreateResponseDto.builder()
+             .chatRoomId(chatRoomId)
+             .postId(postId)
+             .creator(creator)
+             .createdAt(createdAt)
+             .build();
+    }
 }

@@ -37,4 +37,13 @@ public class ChatRoomDto {
                 .createdAt(chatRoom.getCreatedAt())
                 .build();
     }
+
+    public static ChatRoomDto of(Long chatRoomId, Long postId, LocalDateTime createdAt) {
+        return ChatRoomDto.builder()
+                .chatRoomId(chatRoomId)
+                .postId(postId)
+                .createdAt(createdAt)
+                .build();
+    }
+
 }
