@@ -35,12 +35,25 @@ public class ChatRoomMember {
 
     private LocalDateTime deletedAt;
 
+    public static ChatRoomMember of(Long id, ChatRoom chatRoom, User user, boolean isCreator, LocalDateTime createdAt, LocalDateTime deletedAt) {
+        return ChatRoomMember.builder()
+                .id(id)
+                .chatRoom(chatRoom)
+                .user(user)
+                .isCreator(isCreator)
+                .createdAt(createdAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
+
     public static ChatRoomMember of(ChatRoom chatRoom, User user) {
         return ChatRoomMember.builder()
                 .chatRoom(chatRoom)
                 .user(user)
                 .build();
     }
+
+
 
     public static ChatRoomMember createChatRoomCreator(ChatRoom chatRoom, User user) {
         return ChatRoomMember.builder()

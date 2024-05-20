@@ -51,6 +51,35 @@ public class Post {
 
     private LocalDateTime deletedAt;
 
+    public static Post of(Long id,
+                          User user,
+                          String restaurantName,
+                          Category category,
+                          Location meetLocation,
+                          int deliveryFee,
+                          int minOrderFee,
+                          String content,
+                          boolean status,
+                          LocalDateTime createdAt,
+                          LocalDateTime updatedAt,
+                          LocalDateTime deletedAt
+                          ){
+        return Post.builder()
+                .id(id)
+                .user(user)
+                .restaurantName(restaurantName)
+                .category(category)
+                .meetLocation(meetLocation)
+                .deliveryFee(deliveryFee)
+                .minOrderFee(minOrderFee)
+                .content(content)
+                .status(status)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
+
     public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category, Location meetLocation) {
         return Post.builder()
                 .user(user)

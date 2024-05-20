@@ -22,6 +22,18 @@ public class Category {
     private String categoryName;
 
     public static Category of(
+            Long id,
+            String categoryCode,
+            String categoryName
+    ){
+        return Category.builder()
+                .id(id)
+                .categoryCode(categoryCode)
+                .categoryName(categoryName)
+                .build();
+    }
+
+    public static Category of(
             String categoryCode,
             String categoryName
     ){

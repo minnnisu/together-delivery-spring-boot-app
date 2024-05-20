@@ -28,6 +28,16 @@ public class ChatRoom {
 
     private LocalDateTime deletedAt;
 
+    public static ChatRoom of(Long id, Post post, LocalDateTime createdAt, LocalDateTime deletedAt){
+        return ChatRoom.builder()
+                .id(id)
+                .post(post)
+                .createdAt(createdAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
+
+
     public static ChatRoom of(Post post){
         return ChatRoom.builder()
                 .post(post)

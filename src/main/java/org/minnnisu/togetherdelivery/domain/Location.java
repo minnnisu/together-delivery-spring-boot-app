@@ -45,4 +45,25 @@ public class Location {
                 .longitude(postSaveRequestDto.getMeetLocation().getLongitude())
                 .build();
     }
+
+    public static Location of(
+            Long id,
+            String address,
+            String shortAddress,
+            double latitude,
+            double longitude,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime deletedAt){
+        return Location.builder()
+                .id(id)
+                .address(address)
+                .shortAddress(shortAddress)
+                .latitude(latitude)
+                .longitude(longitude)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
 }
