@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.text.html.Option;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -24,8 +26,7 @@ import static org.minnnisu.togetherdelivery.common.DummyData.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ChatRoomServiceTest {
@@ -47,7 +48,7 @@ class ChatRoomServiceTest {
     @DisplayName("채팅방 리스트 요청")
     class WhenRequestingChatRoomList {
         @Test
-        @DisplayName("채팅방 리스트를 반환한다.")
+        @DisplayName("채팅방 리스트가 발생한다.")
         void ThenReturnChatRoomList(){
             User user = createUser();
 
@@ -69,11 +70,11 @@ class ChatRoomServiceTest {
                     .isEqualTo(chatRoomMember.getChatRoom().getPost().getCreatedAt());
 
 
-            verify(chatRoomMemberRepository, atLeastOnce()).findAllByUser(user);
+            verify(chatRoomMemberRepository, times(1)).findAllByUser(user);
         }
 
         @Test
-        @DisplayName("UserPermissionDeniedError를 반환한다.")
+        @DisplayName("UserPermissionDeniedError가 발생한다.")
         void ThenThrowUserPermissionDeniedError(){
             ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
 
@@ -119,15 +120,15 @@ class ChatRoomServiceTest {
             assertThat(result.getCreatedAt())
                     .isEqualTo(chatRoomCreator.getCreatedAt());
 
-            verify(postRepository, atLeastOnce()).findById(any());
-            verify(chatRoomRepository, atLeastOnce()).findByPost(any());
-            verify(chatRoomRepository, atLeastOnce()).save(any());
-            verify(chatRoomMemberRepository, atLeastOnce()).save(any());
-            verify(chatMessageRepository, atLeastOnce()).save(any());
+            verify(postRepository, times(1)).findById(any());
+            verify(chatRoomRepository, times(1)).findByPost(any());
+            verify(chatRoomRepository, times(1)).save(any());
+            verify(chatRoomMemberRepository, times(1)).save(any());
+            verify(chatMessageRepository, times(1)).save(any());
         }
 
         @Test
-        @DisplayName("UserPermissionDeniedError를 반환한다.")
+        @DisplayName("UserPermissionDeniedError가 발생한다.")
         void ThenThrowUserPermissionDeniedError(){
             ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
 
@@ -142,7 +143,7 @@ class ChatRoomServiceTest {
         }
 
         @Test
-        @DisplayName("NoSuchPostError를 반환한다.")
+        @DisplayName("NoSuchPostError가 발생한다.")
         void ThenThrowNoSuchPostError(){
             ErrorCode noSuchPostError = ErrorCode.NoSuchPostError;
 
@@ -163,7 +164,7 @@ class ChatRoomServiceTest {
         }
 
         @Test
-        @DisplayName("AlreadyExistChatRoomError를 반환한다.")
+        @DisplayName("AlreadyExistChatRoomError가 발생한다.")
         void ThenThrowAlreadyExistChatRoomError(){
             ErrorCode alreadyExistChatRoomError = ErrorCode.AlreadyExistChatRoomError;
 
@@ -184,6 +185,264 @@ class ChatRoomServiceTest {
             assertThat(thrown)
                     .isInstanceOf(CustomErrorException.class)
                     .hasMessage(alreadyExistChatRoomError.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("채팅방 초대")
+    class WhenInviteChatRoom{
+        @Test
+        @DisplayName("체팅방에 초대한다")
+        void ThenInviteChatRoom() {
+            // given
+            User creator = createUser();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, creator.getNickname());
+
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+            Optional<ChatRoomMember> chatRoomCreator = Optional.of(createChatRoomMember(true));
+            User invitedMember = createUser2();
+            ChatRoomMember newChatRoomMember = createChatRoomMember2(false);
+
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(chatRoomCreator);
+            given(userRepository.findByNickname(any())).willReturn(Optional.of(invitedMember));
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(invitedMember))).willReturn(Optional.empty());
+            given(chatRoomMemberRepository.save(any())).willReturn(newChatRoomMember);
+
+            // when
+            ChatRoomInviteResponseDto result = chatRoomService.inviteMember(chatRoomInviteRequestDto, creator);
+            assertThat(result.getChatRoomId())
+                    .isEqualTo(newChatRoomMember.getChatRoom().getId());
+            assertThat(result.getInvitedMember())
+                    .isEqualTo(newChatRoomMember.getUser().getNickname());
+            assertThat(result.getCreatedAt())
+                    .isEqualTo(newChatRoomMember.getCreatedAt());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(creator));
+            verify(userRepository, times(1)).findByNickname(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(invitedMember));
+            verify(chatRoomMemberRepository, times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("UserPermissionDeniedError가 발생한다.")
+        void ThenUserPermissionDeniedError() {
+            // given
+            ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
+
+            User invitedMember = createUser2();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, invitedMember.getNickname());
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.inviteMember(chatRoomInviteRequestDto, null));
+
+            // then
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(userPermissionDeniedError.getMessage());
+        }
+
+        @Test
+        @DisplayName("NoSuchChatRoomError가 발생한다.")
+        void ThenNoSuchChatRoomError() {
+            // given
+            User invitedMember = createUser2();
+            User creator = createUser();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, invitedMember.getNickname());
+
+            given(chatRoomRepository.findById(any())).willReturn(Optional.empty());
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.inviteMember(chatRoomInviteRequestDto, creator));
+
+            // then
+            ErrorCode noSuchChatRoomError = ErrorCode.NoSuchChatRoomError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(noSuchChatRoomError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+        }
+
+        @Test
+        @DisplayName("NoSuchMemberInChatRoomError가 발생한다.")
+        void ThenNoSuchMemberInChatRoomError() {
+            // given
+            User invitedMember = createUser2();
+            User creator = createUser();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, invitedMember.getNickname());
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+
+
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(Optional.empty());
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.inviteMember(chatRoomInviteRequestDto, creator));
+
+            // then
+            ErrorCode noSuchMemberInChatRoomError = ErrorCode.NoSuchMemberInChatRoomError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(noSuchMemberInChatRoomError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), any());
+        }
+
+        @Test
+        @DisplayName("ChatInvitePermissionDeniedError가 발생한다.")
+        void ThenChatInvitePermissionDeniedError() {
+            // given
+            User invitedMember = createUser2();
+            User creator = createUser();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, invitedMember.getNickname());
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+            Optional<ChatRoomMember> noChatRoomCreator = Optional.of(createChatRoomMember(false));
+
+
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(noChatRoomCreator);
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.inviteMember(chatRoomInviteRequestDto, creator));
+
+            // then
+            ErrorCode chatInvitePermissionDeniedError = ErrorCode.ChatInvitePermissionDeniedError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(chatInvitePermissionDeniedError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), any());
+        }
+
+        @Test
+        @DisplayName("AlreadyExistChatRoomMemberError가 발생한다.")
+        void ThenAlreadyExistChatRoomMemberError() {
+            // given
+            User invitedMember = createUser2();
+            User creator = createUser();
+            ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, invitedMember.getNickname());
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+            Optional<ChatRoomMember> noChatRoomCreator = Optional.of(createChatRoomMember(true));
+            Optional<ChatRoomMember> alreadyExistChatRoomMember = Optional.of(createChatRoomMember2(false));
+
+
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(noChatRoomCreator);
+            given(userRepository.findByNickname(any())).willReturn(Optional.of(invitedMember));
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(invitedMember))).willReturn(alreadyExistChatRoomMember);
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.inviteMember(chatRoomInviteRequestDto, creator));
+
+            // then
+            ErrorCode alreadyExistChatRoomMemberError = ErrorCode.AlreadyExistChatRoomMemberError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(alreadyExistChatRoomMemberError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(creator));
+            verify(userRepository, times(1)).findByNickname(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(invitedMember));
+        }
+    }
+
+    @Nested
+    @DisplayName("채팅방 탈퇴")
+    class WhenExitChatRoom {
+        @Test
+        @DisplayName("채팅방을 탈퇴한다.")
+        void ThenExitChatRoom(){
+            // given
+            User exitedUser = createUser();
+            ChatRoomExitRequestDto chatRoomExitRequestDto = new ChatRoomExitRequestDto(1L);
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+            Optional<ChatRoomMember> chatRoomMemberOptional = Optional.of(createChatRoomMember(false));
+
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), any())).willReturn(chatRoomMemberOptional);
+
+            // when
+            ChatRoomExitResponseDto result = chatRoomService.exitChatRoom(chatRoomExitRequestDto, exitedUser);
+
+            // then
+            assertThat(result.getChatRoomId())
+                    .isEqualTo(chatRoomMemberOptional.get().getChatRoom().getId());
+            assertThat(result.getDeletedMember())
+                    .isEqualTo(chatRoomMemberOptional.get().getUser().getUsername());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), any());
+            verify(chatMessageRepository, times(1)).deleteAllBySender(any());
+            verify(chatRoomMemberRepository, times(1)).delete(any());
+        }
+
+        @Test
+        @DisplayName("UserPermissionDeniedError가 발생한다.")
+        void ThenThrowUserPermissionDeniedError(){
+            // given
+            ChatRoomExitRequestDto chatRoomExitRequestDto = new ChatRoomExitRequestDto(1L);
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.exitChatRoom(chatRoomExitRequestDto, null));
+
+            // then
+            ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(userPermissionDeniedError.getMessage());
+
+        }
+
+        @Test
+        @DisplayName("NoSuchChatRoomError가 발생한다.")
+        void ThenThrowNoSuchChatRoomError(){
+            // given
+            User exitedUser = createUser();
+            ChatRoomExitRequestDto chatRoomExitRequestDto = new ChatRoomExitRequestDto(1L);
+            given(chatRoomRepository.findById(any())).willReturn(Optional.empty());
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.exitChatRoom(chatRoomExitRequestDto, exitedUser));
+
+
+            // then
+            ErrorCode noSuchChatRoomError = ErrorCode.NoSuchChatRoomError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(noSuchChatRoomError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+        }
+
+        @Test
+        @DisplayName("NoSuchMemberInChatRoomError가 발생한다.")
+        void ThenThrowNoSuchMemberInChatRoomError(){
+            // given
+            User exitedUser = createUser();
+            ChatRoomExitRequestDto chatRoomExitRequestDto = new ChatRoomExitRequestDto(1L);
+
+            Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
+            given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
+            given(chatRoomMemberRepository.findByChatRoomAndUser(any(), any())).willReturn(Optional.empty());
+
+
+            // when
+            Throwable thrown = catchThrowable(() -> chatRoomService.exitChatRoom(chatRoomExitRequestDto, exitedUser));
+
+
+            // then
+            ErrorCode noSuchMemberInChatRoomError = ErrorCode.NoSuchMemberInChatRoomError;
+            assertThat(thrown)
+                    .isInstanceOf(CustomErrorException.class)
+                    .hasMessage(noSuchMemberInChatRoomError.getMessage());
+
+            verify(chatRoomRepository, times(1)).findById(any());
+            verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), any());
         }
     }
 }
