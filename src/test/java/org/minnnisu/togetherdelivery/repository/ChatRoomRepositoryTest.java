@@ -32,7 +32,7 @@ class ChatRoomRepositoryTest {
     void whenFindByPost_thenGetChatRoom() {
         // given
         User user = userRepository.save(getSaveTargetUser());
-        Category category = categoryRepository.save(getSaveTargetCategory());
+        Category category = categoryRepository.save(getSaveTargetAmericanFoodCategory());
         Location location = locationRepository.save(getSaveTargetLocation());
         Post post = postRepository.save(getSaveTargetPost(user, category, location));
         ChatRoom chatRoom = chatRoomRepository.save(getSaveTargetChatRoom(post));
@@ -42,10 +42,8 @@ class ChatRoomRepositoryTest {
 
         // then
         ChatRoom foundChatRoom = foundChatRoomOptional.get();
-        assertThat(foundChatRoom.getId()).isEqualTo(chatRoom.getId());
-        assertThat(foundChatRoom.getPost().getId()).isEqualTo(chatRoom.getPost().getId());
-        assertThat(foundChatRoom.getCreatedAt()).isSameAs(chatRoom.getCreatedAt());
-        assertThat(foundChatRoom.getDeletedAt()).isSameAs(chatRoom.getDeletedAt());
+
+        assertThat(foundChatRoom).isSameAs(chatRoom);
     }
 
     @DisplayName("채팅방 찾기 - 존재하지 않음")
@@ -53,7 +51,7 @@ class ChatRoomRepositoryTest {
     public void whenFindByPost_thenGetEmptyChatRoom() {
         // given
         User user = userRepository.save(getSaveTargetUser());
-        Category category = categoryRepository.save(getSaveTargetCategory());
+        Category category = categoryRepository.save(getSaveTargetAmericanFoodCategory());
         Location location = locationRepository.save(getSaveTargetLocation());
         Post post = postRepository.save(getSaveTargetPost(user, category, location));
 
