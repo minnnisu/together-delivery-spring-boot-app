@@ -2,6 +2,7 @@ package org.minnnisu.togetherdelivery.common;
 
 import org.minnnisu.togetherdelivery.constant.MealCategoryCode;
 import org.minnnisu.togetherdelivery.domain.*;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 import java.time.LocalDateTime;
 
@@ -112,5 +113,59 @@ public class DummyData {
 
     public static ChatRoomMember createChatRoomMember2(boolean isCreator) {
         return ChatRoomMember.of(2L, createChatRoom2(), createUser(), isCreator, LocalDateTime.of(2024,1,1,1,1,1), null);
+    }
+
+
+    public static User getSaveTargetUser() {
+        return User.of(
+                "minnnisu2",
+                "user1234#",
+                "최민수",
+                "유저2",
+                "user1234@naver.com",
+                false,
+                "010-1234-5678",
+                false,
+                "한끼대학교",
+                PasswordEncoderFactories.createDelegatingPasswordEncoder()
+        );
+    }
+
+    public static Category getSaveTargetCategory() {
+        MealCategoryCode mealCategoryCode = MealCategoryCode.AMERICAN_FOOD;
+
+        return Category.of(
+                mealCategoryCode.name(),
+                mealCategoryCode.getCategoryName()
+        );
+    }
+
+    public static Location getSaveTargetLocation() {
+        return Location.of(
+                "대한민국 경상남도 창원시 의창구 의창대로 67",
+                "창원역",
+                35.2575221,
+                128.6074553
+        );
+    }
+
+    public static Post getSaveTargetPost(User user, Category category, Location location) {
+        return Post.of(
+                user,
+                "저번에 먹어봤는데 맛있었어요",
+                "한끼 치킨",
+                category,
+                location,
+                15000,
+                3000
+        );
+    }
+
+    public static ChatRoom getSaveTargetChatRoom(Post post) {
+        return ChatRoom.of(post);
+    }
+
+    public static ChatRoomMember getSaveTargetChatRoomMember(ChatRoom chatRoom, User user){
+        return ChatRoomMember.of(chatRoom, user);
     }
 }

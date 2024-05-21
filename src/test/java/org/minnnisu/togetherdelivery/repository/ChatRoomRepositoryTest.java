@@ -12,6 +12,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.minnnisu.togetherdelivery.common.DummyData.*;
 
 @DataJpaTest
 class ChatRoomRepositoryTest {
@@ -61,55 +62,5 @@ class ChatRoomRepositoryTest {
 
         // then
         assertThat(foundChatRoomOptional).isEmpty();
-
-    }
-
-    private User getSaveTargetUser() {
-        return User.of(
-                "minnnisu2",
-                "user1234#",
-                "최민수",
-                "유저2",
-                "user1234@naver.com",
-                false,
-                "010-1234-5678",
-                false,
-                "한끼대학교",
-                PasswordEncoderFactories.createDelegatingPasswordEncoder()
-        );
-    }
-
-    private Category getSaveTargetCategory() {
-        MealCategoryCode mealCategoryCode = MealCategoryCode.AMERICAN_FOOD;
-
-        return Category.of(
-                mealCategoryCode.name(),
-                mealCategoryCode.getCategoryName()
-        );
-    }
-
-    private Location getSaveTargetLocation() {
-        return Location.of(
-                "대한민국 경상남도 창원시 의창구 의창대로 67",
-                "창원역",
-                35.2575221,
-                128.6074553
-        );
-    }
-
-    private Post getSaveTargetPost(User user, Category category, Location location) {
-        return Post.of(
-                user,
-                "저번에 먹어봤는데 맛있었어요",
-                "한끼 치킨",
-                category,
-                location,
-                15000,
-                3000
-        );
-    }
-
-    private ChatRoom getSaveTargetChatRoom(Post post) {
-        return ChatRoom.of(post);
     }
 }
