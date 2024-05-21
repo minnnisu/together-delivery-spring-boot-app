@@ -62,7 +62,7 @@ public class DummyData {
     public static Post createPost2() {
         return Post.of(
                 2L,
-                createUser(),
+                createUser2(),
                 "한끼 치킨",
                 createCategory(MealCategoryCode.CHICKEN),
                 createLocation(),

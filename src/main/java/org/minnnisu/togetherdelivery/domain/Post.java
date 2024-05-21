@@ -91,4 +91,16 @@ public class Post {
                 .minOrderFee(postSaveRequestDto.getMinOrderFee())
                 .build();
     }
+
+    public static Post of(User user, String content, String restaurantName, Category category, Location meetLocation, int deliveryFee, int minOrderFee) {
+        return Post.builder()
+                .user(user)
+                .content(content)
+                .restaurantName(restaurantName)
+                .meetLocation(meetLocation)
+                .category(category)
+                .deliveryFee(deliveryFee)
+                .minOrderFee(minOrderFee)
+                .build();
+    }
 }

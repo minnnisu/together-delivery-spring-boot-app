@@ -66,4 +66,17 @@ public class Location {
                 .deletedAt(deletedAt)
                 .build();
     }
+
+    public static Location of(
+            String address,
+            String shortAddress,
+            double latitude,
+            double longitude){
+        return Location.builder()
+                .address(address)
+                .shortAddress(shortAddress)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
+    }
 }
