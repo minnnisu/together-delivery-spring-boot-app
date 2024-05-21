@@ -29,7 +29,7 @@ class ChatRoomRepositoryTest {
 
     @DisplayName("채팅방 찾기 - 존재함")
     @Test
-    void whenFindByPost_thenGetChatRoom() {
+    void whenFindByPost_thenReturnChatRoom() {
         // given
         User user = userRepository.save(getSaveTargetUser());
         Category category = categoryRepository.save(getSaveTargetAmericanFoodCategory());
@@ -48,7 +48,7 @@ class ChatRoomRepositoryTest {
 
     @DisplayName("채팅방 찾기 - 존재하지 않음")
     @Test
-    public void whenFindByPost_thenGetEmptyChatRoom() {
+    public void whenFindByPost_thenReturnEmpty() {
         // given
         User user = userRepository.save(getSaveTargetUser());
         Category category = categoryRepository.save(getSaveTargetAmericanFoodCategory());
