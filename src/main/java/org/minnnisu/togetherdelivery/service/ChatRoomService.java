@@ -9,6 +9,7 @@ import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.chat.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -91,12 +92,16 @@ public class ChatRoomService {
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomExitRequestDto.getChatRoomId())
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
-        ChatRoomMember chatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
+        ChatRoomMember deleteTargetChatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchMemberInChatRoomError));
-        chatMessageRepository.deleteAllBySender(chatRoomMember);
 
-        ChatRoomExitResponseDto chatRoomExitResponseDto = ChatRoomExitResponseDto.fromEntity(chatRoomMember);
-        chatRoomMemberRepository.delete(chatRoomMember);
+        List<ChatMessage> chatMessages = chatMessageRepository.findAllBySender(deleteTargetChatRoomMember);
+        for(ChatMessage chatMessage: chatMessages){
+            chatMessage.updateSenderNull();
+        }
+
+        ChatRoomExitResponseDto chatRoomExitResponseDto = ChatRoomExitResponseDto.fromEntity(deleteTargetChatRoomMember);
+        chatRoomMemberRepository.delete(deleteTargetChatRoomMember);
 
         return chatRoomExitResponseDto;
     }

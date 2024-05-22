@@ -36,6 +36,10 @@ public class ChatMessage {
 
     private LocalDateTime deletedAt;
 
+    public void updateSenderNull(){
+        this.sender = null;
+    }
+
     public static ChatMessage of(ChatRoomMember sender, String message, ChatMessageType chatMessageType) {
         return ChatMessage.builder()
                 .chatRoom(sender.getChatRoom())
