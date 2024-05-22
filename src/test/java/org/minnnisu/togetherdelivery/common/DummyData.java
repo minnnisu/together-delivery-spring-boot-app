@@ -1,5 +1,6 @@
 package org.minnnisu.togetherdelivery.common;
 
+import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.MealCategoryCode;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -260,5 +261,9 @@ public class DummyData {
 
     public static ChatRoomMember getSaveTargetChatRoomMember(ChatRoom chatRoom, User user){
         return ChatRoomMember.of(chatRoom, user);
+    }
+
+    public static ChatMessage getSaveTargetChatMessage(ChatRoomMember sender, String message, ChatMessageType chatMessageType){
+        return ChatMessage.of(sender, message, chatMessageType);
     }
 }
