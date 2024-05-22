@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.chat.*;
@@ -362,9 +363,15 @@ class ChatRoomServiceTest {
             ChatRoomExitRequestDto chatRoomExitRequestDto = new ChatRoomExitRequestDto(1L);
             Optional<ChatRoom> chatRoomOptional = Optional.of(createChatRoom());
             Optional<ChatRoomMember> chatRoomMemberOptional = Optional.of(createChatRoomMember(false));
+            List<ChatMessage> chatMessages = List.of(
+                    ChatMessage.of(chatRoomMemberOptional.get(), "메시지1", ChatMessageType.TALK),
+                    ChatMessage.of(chatRoomMemberOptional.get(), "메시지2", ChatMessageType.TALK),
+                    ChatMessage.of(chatRoomMemberOptional.get(), "메시지3", ChatMessageType.TALK)
+            );
 
             given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
             given(chatRoomMemberRepository.findByChatRoomAndUser(any(), any())).willReturn(chatRoomMemberOptional);
+            given(chatMessageRepository.findAllBySender(any())).willReturn(chatMessages);
 
             // when
             ChatRoomExitResponseDto result = chatRoomService.exitChatRoom(chatRoomExitRequestDto, exitedUser);
@@ -377,7 +384,7 @@ class ChatRoomServiceTest {
 
             verify(chatRoomRepository, times(1)).findById(any());
             verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), any());
-            verify(chatMessageRepository, times(1)).deleteAllBySender(any());
+            verify(chatMessageRepository, times(1)).findAllBySender(any());
             verify(chatRoomMemberRepository, times(1)).delete(any());
         }
 
