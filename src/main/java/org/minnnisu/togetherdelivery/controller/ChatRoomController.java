@@ -24,14 +24,6 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatRoomListResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<ChatRoomCreateResponseDto> createChatRoom(
-            @Valid @RequestBody ChatRoomCreateRequestDto chatRoomCreateRequestDto,
-            @AuthenticationPrincipal User user) {
-        ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createRoom(chatRoomCreateRequestDto, user);
-        return new ResponseEntity<>(chatRoomCreateResponseDto, HttpStatus.CREATED);
-    }
-
     @PostMapping("/invite")
     public ResponseEntity<ChatRoomInviteResponseDto> inviteMember(
             @Valid @RequestBody ChatRoomInviteRequestDto chatRoomInviteRequestDto,

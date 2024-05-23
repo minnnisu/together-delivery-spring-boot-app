@@ -21,36 +21,9 @@ import java.util.Optional;
 @Transactional
 public class ChatRoomService {
     private final UserRepository userRepository;
-    private final PostRepository postRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
-
-    public ChatRoomCreateResponseDto createRoom(ChatRoomCreateRequestDto chatRoomCreateRequestDto, User user) {
-        if (user == null) {
-            throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
-        }
-
-        Post post = postRepository.findById(chatRoomCreateRequestDto.getPostId())
-                .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
-
-        Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByPost(post);
-        if (chatRoomOptional.isPresent()) {
-            throw new CustomErrorException(ErrorCode.AlreadyExistChatRoomError);
-        }
-
-        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.of(post));
-
-        ChatRoomMember chatRoomCreator = chatRoomMemberRepository.save(ChatRoomMember.createChatRoomCreator(newChatRoom, user));
-
-        chatMessageRepository.save(
-                ChatMessage.of(
-                        chatRoomCreator,
-                        "채팅방이 생성되었습니다.",
-                        ChatMessageType.OPEN));
-
-        return ChatRoomCreateResponseDto.fromEntity(chatRoomCreator);
-    }
 
     public ChatRoomListResponseDto getChatRoomList(User user) {
         if (user == null) {
