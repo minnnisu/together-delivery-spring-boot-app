@@ -10,6 +10,7 @@ import org.minnnisu.togetherdelivery.dto.chat.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final StompChatService stompChatService;
+
 
     public ChatRoomListResponseDto getChatRoomList(User user) {
         if (user == null) {
@@ -34,7 +37,7 @@ public class ChatRoomService {
         return ChatRoomListResponseDto.fromEntity(chatRoomMembers);
     }
 
-    public ChatRoomInviteResponseDto inviteMember(ChatRoomInviteRequestDto chatRoomInviteRequestDto, User user) {
+    public ChatRoomInviteDto inviteMember(ChatRoomInviteRequestDto chatRoomInviteRequestDto, User user) {
         if (user == null) {
             throw new CustomErrorException(ErrorCode.UserPermissionDeniedError);
         }
@@ -54,7 +57,9 @@ public class ChatRoomService {
         }
         ChatRoomMember newChatRoomMember = chatRoomMemberRepository.save(ChatRoomMember.of(chatRoom, inviteTargetMember));
 
-        return ChatRoomInviteResponseDto.fromEntity(newChatRoomMember);
+        ChatMessageDto chatMessageDto = stompChatService.sendInvitationMessage(chatRoom, chatRoomCreator, newChatRoomMember);
+
+        return ChatRoomInviteDto.of(newChatRoomMember, chatMessageDto);
     }
 
 

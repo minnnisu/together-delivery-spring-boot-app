@@ -50,12 +50,6 @@ public class StompChatService {
             return ChatMessageDto.of(responsePath, chatMessageOpenResponseDto);
         }
 
-        if (chatMessageType == ChatMessageType.ENTER) {
-            ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageType));
-            ChatMessageEnterResponseDto chatMessageEnterResponseDto = ChatMessageEnterResponseDto.fromEntity(chatMessage);
-
-            return ChatMessageDto.of(responsePath, chatMessageEnterResponseDto);
-        }
 
         if (chatMessageType == ChatMessageType.TALK) {
             ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageRequestDto.getMessage(), chatMessageType));
@@ -83,6 +77,16 @@ public class StompChatService {
 
 
         throw new CustomErrorException(ErrorCode.UnsupportedMessageTypeError);
+    }
+
+    // 초대된 유저 정보 사용
+    public ChatMessageDto sendInvitationMessage(ChatRoom chatRoom, ChatRoomMember sender, ChatRoomMember newChatRoomMember) {
+        String responsePath = "/topic/chat/room/" + chatRoom.getId();
+
+        ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, ChatMessageType.ENTER));
+        ChatMessageEnterResponseDto chatMessageEnterResponseDto = ChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
+
+        return ChatMessageDto.of(responsePath, chatMessageEnterResponseDto);
     }
 }
 

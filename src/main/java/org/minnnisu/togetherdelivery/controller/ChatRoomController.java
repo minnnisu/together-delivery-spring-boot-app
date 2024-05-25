@@ -8,6 +8,7 @@ import org.minnnisu.togetherdelivery.dto.chat.*;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/chat/room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+    private final SimpMessageSendingOperations sendingOperations;
+
 
     @GetMapping()
     public ResponseEntity<ChatRoomListResponseDto> getChatRoomList(@AuthenticationPrincipal User user){
@@ -29,8 +32,13 @@ public class ChatRoomController {
             @Valid @RequestBody ChatRoomInviteRequestDto chatRoomInviteRequestDto,
             @AuthenticationPrincipal User user
     ){
-        ChatRoomInviteResponseDto chatRoomInviteResponseDto = chatRoomService.inviteMember(chatRoomInviteRequestDto, user);
-        return new ResponseEntity<>(chatRoomInviteResponseDto, HttpStatus.CREATED);
+        ChatRoomInviteDto chatRoomInviteDto = chatRoomService.inviteMember(chatRoomInviteRequestDto, user);
+
+        ChatMessageDto chatMessageDto = chatRoomInviteDto.getChatMessage();
+
+        sendingOperations.convertAndSend(chatMessageDto.getPath(), chatMessageDto.getChatMessageResponseDto());
+
+        return new ResponseEntity<>(ChatRoomInviteResponseDto.fromDto(chatRoomInviteDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/exit")

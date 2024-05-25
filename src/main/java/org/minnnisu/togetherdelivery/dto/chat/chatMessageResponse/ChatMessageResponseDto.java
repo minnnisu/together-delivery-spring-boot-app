@@ -20,4 +20,13 @@ public class ChatMessageResponseDto {
     private String message;
 
     private LocalDateTime createdAt;
+
+    public static ChatMessageResponseDto of(ChatMessageType type, String sender, String message, LocalDateTime createdAt) {
+        return ChatMessageResponseDto.builder()
+                .type(type)
+                .sender(sender)
+                .message(message)
+                .createdAt(createdAt)
+                .build();
+    }
 }

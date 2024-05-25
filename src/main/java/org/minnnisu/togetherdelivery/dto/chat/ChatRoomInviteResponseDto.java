@@ -19,11 +19,11 @@ public class ChatRoomInviteResponseDto {
     private String invitedMember;
     private LocalDateTime createdAt;
 
-    public static ChatRoomInviteResponseDto fromEntity(ChatRoomMember chatRoomMember){
+    public static ChatRoomInviteResponseDto fromDto(ChatRoomInviteDto chatRoomInviteDto){
         return ChatRoomInviteResponseDto.builder()
-                .chatRoomId(chatRoomMember.getChatRoom().getId())
-                .invitedMember(chatRoomMember.getUser().getNickname())
-                .createdAt(chatRoomMember.getCreatedAt())
+                .chatRoomId(chatRoomInviteDto.getChatRoomId())
+                .invitedMember(chatRoomInviteDto.getInvitedMember())
+                .createdAt(chatRoomInviteDto.getCreatedAt())
                 .build();
     }
 }
