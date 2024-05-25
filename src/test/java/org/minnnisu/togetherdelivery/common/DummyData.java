@@ -116,6 +116,10 @@ public class DummyData {
         return ChatRoomMember.of(2L, createChatRoom2(), createUser(), isCreator, LocalDateTime.of(2024,1,1,1,1,1), null);
     }
 
+    public static ChatMessage createChatMessage(ChatMessageType chatMessageType){
+        return ChatMessage.of(createChatRoomMember(false), "message", chatMessageType);
+    }
+
 
     public static User getSaveTargetUser() {
         return User.of(

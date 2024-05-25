@@ -2,6 +2,8 @@ package org.minnnisu.togetherdelivery.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -11,19 +13,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.dto.chat.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.ChatMessageEnterResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @WebMvcTest(ChatRoomController.class)
 class ChatRoomControllerTest {
@@ -33,6 +39,9 @@ class ChatRoomControllerTest {
 
     @MockBean
     private ChatRoomService chatRoomService;
+
+    @MockBean
+    private SimpMessageSendingOperations sendingOperations;
 
 
     @Nested
@@ -86,22 +95,31 @@ class ChatRoomControllerTest {
 
     @Nested
     @DisplayName("채팅방 초대 요청")
-    class WhenInvitingChatRoom{
+    class WhenInvitingChatRoom {
         @Test
         @WithMockUser
         @DisplayName("채팅방에 초대한다.")
-        void thenInviteChatRoom() throws Exception{
+        void thenInviteChatRoom() throws Exception {
             ChatRoomInviteRequestDto chatRoomInviteRequestDto = new ChatRoomInviteRequestDto(1L, "user1");
 
             ObjectMapper mapper = new ObjectMapper();
             String requestBody = mapper.writeValueAsString(chatRoomInviteRequestDto);
 
-            // given
+            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", ChatMessageEnterResponseDto.of(
+                    ChatMessageType.OPEN,
+                    "minnnisu",
+                    "message",
+                    LocalDateTime.of(2024, 5, 1, 1, 1, 1)
+            ));
+
+
+
             given(chatRoomService.inviteMember(any(), any()))
-                    .willReturn(new ChatRoomInviteResponseDto(
-                                    1L,
-                                    "minnnisu",
-                                    LocalDateTime.of(2024, 5, 1, 1, 1, 1)));
+                    .willReturn(new ChatRoomInviteDto(
+                            1L,
+                            "minnnisu",
+                            LocalDateTime.of(2024, 5, 1, 1, 1, 1),
+                            chatMessageDto));
 
 
             // when & then
@@ -117,12 +135,15 @@ class ChatRoomControllerTest {
                             LocalDateTime.of(2024, 5, 1, 1, 1, 1).toString()
                     ))
             ;
+
+            verify(sendingOperations, times(1)).convertAndSend(any(), Optional.ofNullable(any()));
+
         }
 
         @Test
         @WithMockUser
         @DisplayName("UserPermissionDeniedError를 발생시킨다.")
-        void thenThrowUserPermissionDeniedError() throws Exception{
+        void thenThrowUserPermissionDeniedError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
 
             testCustomException(userPermissionDeniedError, mockMvc);
@@ -131,7 +152,7 @@ class ChatRoomControllerTest {
         @Test
         @WithMockUser
         @DisplayName("NoSuchChatRoomError를 발생시킨다.")
-        void thenThrowNoSuchChatRoomError() throws Exception{
+        void thenThrowNoSuchChatRoomError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.NoSuchChatRoomError;
 
             testCustomException(userPermissionDeniedError, mockMvc);
@@ -159,7 +180,7 @@ class ChatRoomControllerTest {
         @Test
         @WithMockUser
         @DisplayName("AlreadyExistChatRoomMemberError를 발생시킨다.")
-        void thenThrowAlreadyExistChatRoomMemberError() throws Exception{
+        void thenThrowAlreadyExistChatRoomMemberError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.AlreadyExistChatRoomMemberError;
 
             testCustomException(userPermissionDeniedError, mockMvc);
@@ -228,7 +249,7 @@ class ChatRoomControllerTest {
         @Test
         @WithMockUser
         @DisplayName("UserPermissionDeniedError를 발생시킨다.")
-        void thenThrowUserPermissionDeniedError() throws Exception{
+        void thenThrowUserPermissionDeniedError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.UserPermissionDeniedError;
 
             testCustomException(userPermissionDeniedError, mockMvc);
@@ -237,7 +258,7 @@ class ChatRoomControllerTest {
         @Test
         @WithMockUser
         @DisplayName("NoSuchChatRoomError를 발생시킨다.")
-        void thenThrowNoSuchChatRoomError() throws Exception{
+        void thenThrowNoSuchChatRoomError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.NoSuchChatRoomError;
 
             testCustomException(userPermissionDeniedError, mockMvc);
@@ -246,7 +267,7 @@ class ChatRoomControllerTest {
         @Test
         @WithMockUser
         @DisplayName("NoSuchMemberInChatRoomError를 발생시킨다.")
-        void thenThrowNoSuchMemberInChatRoomError() throws Exception{
+        void thenThrowNoSuchMemberInChatRoomError() throws Exception {
             ErrorCode userPermissionDeniedError = ErrorCode.NoSuchMemberInChatRoomError;
 
             testCustomException(userPermissionDeniedError, mockMvc);

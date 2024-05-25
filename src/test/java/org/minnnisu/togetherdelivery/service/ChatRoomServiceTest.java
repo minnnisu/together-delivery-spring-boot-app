@@ -9,6 +9,7 @@ import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.chat.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.ChatMessageEnterResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
 import org.mockito.InjectMocks;
@@ -36,11 +37,11 @@ class ChatRoomServiceTest {
     @Mock
     private ChatRoomRepository chatRoomRepository;
     @Mock
-    private PostRepository postRepository;
-    @Mock
     private ChatRoomMemberRepository chatRoomMemberRepository;
     @Mock
     private ChatMessageRepository chatMessageRepository;
+    @Mock
+    private StompChatService stompChatService;
 
     @InjectMocks
     private ChatRoomService chatRoomService;
@@ -101,27 +102,34 @@ class ChatRoomServiceTest {
             Optional<ChatRoomMember> chatRoomCreator = Optional.of(createChatRoomMember(true));
             User invitedMember = createUser2();
             ChatRoomMember newChatRoomMember = createChatRoomMember2(false);
+            ChatMessage chatMessage = createChatMessage(ChatMessageType.ENTER);
+
+            ChatMessageEnterResponseDto chatMessageEnterResponseDto = ChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
+            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", chatMessageEnterResponseDto);
 
             given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
             given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(chatRoomCreator);
             given(userRepository.findByNickname(any())).willReturn(Optional.of(invitedMember));
             given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(invitedMember))).willReturn(Optional.empty());
             given(chatRoomMemberRepository.save(any())).willReturn(newChatRoomMember);
+            given(stompChatService.sendInvitationMessage(any(), any(), any())).willReturn(chatMessageDto);
 
             // when
-            ChatRoomInviteResponseDto result = chatRoomService.inviteMember(chatRoomInviteRequestDto, creator);
+            ChatRoomInviteDto result = chatRoomService.inviteMember(chatRoomInviteRequestDto, creator);
             assertThat(result.getChatRoomId())
                     .isEqualTo(newChatRoomMember.getChatRoom().getId());
             assertThat(result.getInvitedMember())
                     .isEqualTo(newChatRoomMember.getUser().getNickname());
             assertThat(result.getCreatedAt())
                     .isEqualTo(newChatRoomMember.getCreatedAt());
+            assertThat(result.getChatMessage()).isSameAs(chatMessageDto);
 
             verify(chatRoomRepository, times(1)).findById(any());
             verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(creator));
             verify(userRepository, times(1)).findByNickname(any());
             verify(chatRoomMemberRepository, times(1)).findByChatRoomAndUser(any(), eq(invitedMember));
             verify(chatRoomMemberRepository, times(1)).save(any());
+            verify(stompChatService, times(1)).sendInvitationMessage(any(), any(), any());
         }
 
         @Test
