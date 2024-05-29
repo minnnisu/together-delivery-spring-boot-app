@@ -50,7 +50,7 @@ class ChatRoomServiceTest {
     @DisplayName("채팅방 리스트 요청")
     class WhenRequestingChatRoomList {
         @Test
-        @DisplayName("채팅방 리스트가 반환한다.")
+        @DisplayName("채팅방 리스트를 반환한다.")
         void ThenReturnChatRoomList(){
             User user = createUser();
 
