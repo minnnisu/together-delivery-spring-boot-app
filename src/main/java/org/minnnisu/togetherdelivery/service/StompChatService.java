@@ -62,10 +62,10 @@ public class StompChatService {
             ChatMessage chatMessage = chatMessageRepository.findById(chatMessageRequestDto.getDeleteTargetChatMessageId())
                     .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatMessageError));
 
-            ChatMessageDeleteResponseDto chatMessageDeleteResponseDto = ChatMessageDeleteResponseDto.fromEntity(chatMessage);
+            StompChatMessageDeleteResponseDto stompChatMessageDeleteResponseDto = StompChatMessageDeleteResponseDto.fromEntity(chatMessage);
             chatMessageRepository.delete(chatMessage);
 
-            return ChatMessageDto.of(responsePath, chatMessageDeleteResponseDto);
+            return ChatMessageDto.of(responsePath, stompChatMessageDeleteResponseDto);
         }
 
         if (chatMessageType == ChatMessageType.LEAVE) {

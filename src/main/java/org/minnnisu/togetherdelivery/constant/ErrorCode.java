@@ -139,7 +139,13 @@ public enum ErrorCode {
     ),
     ChatInvitePermissionDeniedError(
             HttpStatus.FORBIDDEN, "채팅방 초대 권한이 없는 멤버입니다."
-    );
+    ),
+
+    // ---- ChatMessage ----
+    NotTheSenderOfChatMessage(
+            HttpStatus.UNAUTHORIZED, "채팅 메시지의 작성자가 아닙니다."
+    )
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
