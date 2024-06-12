@@ -1,14 +1,11 @@
-package org.minnnisu.togetherdelivery.dto.chat;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter

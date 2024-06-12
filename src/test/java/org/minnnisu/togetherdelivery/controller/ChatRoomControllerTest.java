@@ -15,8 +15,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
-import org.minnnisu.togetherdelivery.dto.chat.*;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.ChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp.StompChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +111,7 @@ class ChatRoomControllerTest {
             ObjectMapper mapper = new ObjectMapper();
             String requestBody = mapper.writeValueAsString(chatRoomInviteRequestDto);
 
-            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", ChatMessageEnterResponseDto.of(
+            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", StompChatMessageEnterResponseDto.of(
                     ChatMessageType.OPEN,
                     "minnnisu",
                     "message",

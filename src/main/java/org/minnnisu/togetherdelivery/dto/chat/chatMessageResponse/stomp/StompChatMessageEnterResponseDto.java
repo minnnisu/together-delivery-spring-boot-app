@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse;
+package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +11,9 @@ import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 @Getter
 @Setter
 @SuperBuilder
-public class ChatMessageEnterResponseDto extends ChatMessageResponseDto {
-    public static ChatMessageEnterResponseDto fromEntity(ChatMessage chatMessage, ChatRoomMember newChatRoomMember) {
-        return ChatMessageEnterResponseDto.builder()
+public class StompChatMessageEnterResponseDto extends StompChatMessageResponseDto {
+    public static StompChatMessageEnterResponseDto fromEntity(ChatMessage chatMessage, ChatRoomMember newChatRoomMember) {
+        return StompChatMessageEnterResponseDto.builder()
                 .message(newChatRoomMember.getUser().getNickname() + "님이 채팅방에 초대되었습니다.")
                 .type(ChatMessageType.ENTER)
                 .sender(chatMessage.getSender().getUser().getNickname())

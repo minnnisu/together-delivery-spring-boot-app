@@ -8,9 +8,9 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 import org.minnnisu.togetherdelivery.domain.ChatRoom;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.chat.ChatMessageDto;
-import org.minnnisu.togetherdelivery.dto.chat.ChatMessageRequestDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.handler.AssignPrincipalHandshakeHandler.StompPrincipal;
 import org.minnnisu.togetherdelivery.repository.ChatMessageRepository;
@@ -44,18 +44,18 @@ public class StompChatService {
 
         if (chatMessageType == ChatMessageType.OPEN) {
             ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageType));
-            ChatMessageOpenResponseDto chatMessageOpenResponseDto = ChatMessageOpenResponseDto.fromEntity(chatMessage);
+            StompChatMessageOpenResponseDto stompChatMessageOpenResponseDto = StompChatMessageOpenResponseDto.fromEntity(chatMessage);
 
 
-            return ChatMessageDto.of(responsePath, chatMessageOpenResponseDto);
+            return ChatMessageDto.of(responsePath, stompChatMessageOpenResponseDto);
         }
 
 
         if (chatMessageType == ChatMessageType.TALK) {
             ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageRequestDto.getMessage(), chatMessageType));
-            ChatMessageTalkResponseDto chatMessageTalkResponseDto = ChatMessageTalkResponseDto.fromEntity(chatMessage);
+            StompChatMessageTalkResponseDto stompChatMessageTalkResponseDto = StompChatMessageTalkResponseDto.fromEntity(chatMessage);
 
-            return ChatMessageDto.of(responsePath, chatMessageTalkResponseDto);
+            return ChatMessageDto.of(responsePath, stompChatMessageTalkResponseDto);
         }
 
         if (chatMessageType == ChatMessageType.DELETE) {
@@ -70,9 +70,9 @@ public class StompChatService {
 
         if (chatMessageType == ChatMessageType.LEAVE) {
             ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageType));
-            ChatMessageLeaveResponseDto chatMessageLeaveResponseDto = ChatMessageLeaveResponseDto.fromEntity(chatMessage);
+            StompChatMessageLeaveResponseDto stompChatMessageLeaveResponseDto = StompChatMessageLeaveResponseDto.fromEntity(chatMessage);
 
-            return ChatMessageDto.of(responsePath, chatMessageLeaveResponseDto);
+            return ChatMessageDto.of(responsePath, stompChatMessageLeaveResponseDto);
         }
 
 
@@ -84,9 +84,9 @@ public class StompChatService {
         String responsePath = "/topic/chat/room/" + chatRoom.getId();
 
         ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, ChatMessageType.ENTER));
-        ChatMessageEnterResponseDto chatMessageEnterResponseDto = ChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
+        StompChatMessageEnterResponseDto stompChatMessageEnterResponseDto = StompChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
 
-        return ChatMessageDto.of(responsePath, chatMessageEnterResponseDto);
+        return ChatMessageDto.of(responsePath, stompChatMessageEnterResponseDto);
     }
 }
 

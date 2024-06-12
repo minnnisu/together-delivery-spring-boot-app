@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite;
 
 import lombok.*;
 import org.minnnisu.togetherdelivery.validation.ListNotEmpty;

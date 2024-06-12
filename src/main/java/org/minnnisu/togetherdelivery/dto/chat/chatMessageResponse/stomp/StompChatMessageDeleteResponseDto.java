@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse;
+package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDeleteDto;
 @Getter
 @Setter
 @SuperBuilder
-public class StompChatMessageDeleteResponseDto extends ChatMessageResponseDto {
+public class StompChatMessageDeleteResponseDto extends StompChatMessageResponseDto {
     private Long deletedChatMessageId;
 
     public static StompChatMessageDeleteResponseDto fromEntity(ChatMessage chatMessage) {

@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomCreate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoomExitRequestDto {
-    private Long chatRoomId;
+public class ChatRoomCreateRequestDto {
+    private Long postId;
 }

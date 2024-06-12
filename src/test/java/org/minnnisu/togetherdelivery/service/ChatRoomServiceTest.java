@@ -8,15 +8,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
-import org.minnnisu.togetherdelivery.dto.chat.*;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.ChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp.StompChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.swing.text.html.Option;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -104,8 +107,8 @@ class ChatRoomServiceTest {
             ChatRoomMember newChatRoomMember = createChatRoomMember2(false);
             ChatMessage chatMessage = createChatMessage(ChatMessageType.ENTER);
 
-            ChatMessageEnterResponseDto chatMessageEnterResponseDto = ChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
-            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", chatMessageEnterResponseDto);
+            StompChatMessageEnterResponseDto stompChatMessageEnterResponseDto = StompChatMessageEnterResponseDto.fromEntity(chatMessage, newChatRoomMember);
+            ChatMessageDto chatMessageDto = ChatMessageDto.of("/topic/chat/room/1", stompChatMessageEnterResponseDto);
 
             given(chatRoomRepository.findById(any())).willReturn(chatRoomOptional);
             given(chatRoomMemberRepository.findByChatRoomAndUser(any(), eq(creator))).willReturn(chatRoomCreator);

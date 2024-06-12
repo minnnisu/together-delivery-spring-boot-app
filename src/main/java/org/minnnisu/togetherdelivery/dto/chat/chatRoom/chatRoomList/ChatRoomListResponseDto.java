@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

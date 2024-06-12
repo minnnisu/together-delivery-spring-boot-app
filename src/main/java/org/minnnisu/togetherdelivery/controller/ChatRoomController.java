@@ -4,7 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.chat.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +40,7 @@ public class ChatRoomController {
 
         ChatMessageDto chatMessageDto = chatRoomInviteDto.getChatMessage();
 
-        sendingOperations.convertAndSend(chatMessageDto.getPath(), chatMessageDto.getChatMessageResponseDto());
+        sendingOperations.convertAndSend(chatMessageDto.getPath(), chatMessageDto.getStompChatMessageResponseDto());
 
         return new ResponseEntity<>(ChatRoomInviteResponseDto.fromDto(chatRoomInviteDto), HttpStatus.CREATED);
     }

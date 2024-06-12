@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse;
+package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @SuperBuilder
-public class ChatMessageResponseDto {
+public class StompChatMessageResponseDto {
     private ChatMessageType type;
 
     private String sender;
@@ -21,8 +21,8 @@ public class ChatMessageResponseDto {
 
     private LocalDateTime createdAt;
 
-    public static ChatMessageResponseDto of(ChatMessageType type, String sender, String message, LocalDateTime createdAt) {
-        return ChatMessageResponseDto.builder()
+    public static StompChatMessageResponseDto of(ChatMessageType type, String sender, String message, LocalDateTime createdAt) {
+        return StompChatMessageResponseDto.builder()
                 .type(type)
                 .sender(sender)
                 .message(message)

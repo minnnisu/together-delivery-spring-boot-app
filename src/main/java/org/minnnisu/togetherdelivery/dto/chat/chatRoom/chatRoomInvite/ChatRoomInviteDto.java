@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite;
 
 
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
 
 import java.time.LocalDateTime;
 
