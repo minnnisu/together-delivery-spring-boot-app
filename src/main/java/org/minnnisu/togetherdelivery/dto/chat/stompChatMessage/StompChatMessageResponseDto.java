@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp;
+package org.minnnisu.togetherdelivery.dto.chat.stompChatMessage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

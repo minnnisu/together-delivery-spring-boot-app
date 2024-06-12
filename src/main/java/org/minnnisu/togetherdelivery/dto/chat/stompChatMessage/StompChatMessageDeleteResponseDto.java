@@ -1,11 +1,11 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp;
+package org.minnnisu.togetherdelivery.dto.chat.stompChatMessage;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.domain.ChatMessage;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDeleteDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageDelete.ChatMessageDeleteDto;
 
 
 @Getter

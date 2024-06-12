@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessage;
+package org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageDelete;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessage;
+package org.minnnisu.togetherdelivery.dto.chat.stompChatMessage;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 
 @Getter
 @Setter
-public class ChatMessageRequestDto {
+public class StompChatMessageRequestDto {
     private ChatMessageType type;
 
     private Long chatRoomId;

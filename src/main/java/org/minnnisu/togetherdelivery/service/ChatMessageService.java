@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.ChatMessage;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDeleteDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageDelete.ChatMessageDeleteDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.ChatMessageRepository;
 import org.springframework.stereotype.Service;

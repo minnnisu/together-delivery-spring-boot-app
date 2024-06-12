@@ -8,9 +8,9 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 import org.minnnisu.togetherdelivery.domain.ChatRoom;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 import org.minnnisu.togetherdelivery.domain.User;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageRequestDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.stomp.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageInvite.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatMessage.stompChatMessage.*;
+import org.minnnisu.togetherdelivery.dto.chat.stompChatMessage.*;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.handler.AssignPrincipalHandshakeHandler.StompPrincipal;
 import org.minnnisu.togetherdelivery.repository.ChatMessageRepository;
@@ -28,14 +28,14 @@ public class StompChatService {
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public ChatMessageDto sendMessage(ChatMessageRequestDto chatMessageRequestDto, StompPrincipal stompPrincipal) {
-        String responsePath = "/topic/chat/room/" + chatMessageRequestDto.getChatRoomId();
-        ChatMessageType chatMessageType = chatMessageRequestDto.getType();
+    public ChatMessageDto sendMessage(StompChatMessageRequestDto stompChatMessageRequestDto, StompPrincipal stompPrincipal) {
+        String responsePath = "/topic/chat/room/" + stompChatMessageRequestDto.getChatRoomId();
+        ChatMessageType chatMessageType = stompChatMessageRequestDto.getType();
 
-        User user = userRepository.findByUsername(chatMessageRequestDto.getUsername())
+        User user = userRepository.findByUsername(stompChatMessageRequestDto.getUsername())
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.UserNotFoundError));
 
-        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageRequestDto.getChatRoomId())
+        ChatRoom chatRoom = chatRoomRepository.findById(stompChatMessageRequestDto.getChatRoomId())
                 .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatRoomError));
 
         ChatRoomMember sender = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user)
@@ -52,14 +52,14 @@ public class StompChatService {
 
 
         if (chatMessageType == ChatMessageType.TALK) {
-            ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, chatMessageRequestDto.getMessage(), chatMessageType));
+            ChatMessage chatMessage = chatMessageRepository.save(ChatMessage.of(sender, stompChatMessageRequestDto.getMessage(), chatMessageType));
             StompChatMessageTalkResponseDto stompChatMessageTalkResponseDto = StompChatMessageTalkResponseDto.fromEntity(chatMessage);
 
             return ChatMessageDto.of(responsePath, stompChatMessageTalkResponseDto);
         }
 
         if (chatMessageType == ChatMessageType.DELETE) {
-            ChatMessage chatMessage = chatMessageRepository.findById(chatMessageRequestDto.getDeleteTargetChatMessageId())
+            ChatMessage chatMessage = chatMessageRepository.findById(stompChatMessageRequestDto.getDeleteTargetChatMessageId())
                     .orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchChatMessageError));
 
             StompChatMessageDeleteResponseDto stompChatMessageDeleteResponseDto = StompChatMessageDeleteResponseDto.fromEntity(chatMessage);

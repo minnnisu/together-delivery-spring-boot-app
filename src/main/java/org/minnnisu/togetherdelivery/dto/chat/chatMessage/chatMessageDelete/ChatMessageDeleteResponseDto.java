@@ -1,11 +1,10 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessageResponse.general;
+package org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageDelete;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.ChatMessageDeleteDto;
 
 import java.time.LocalDateTime;
 
