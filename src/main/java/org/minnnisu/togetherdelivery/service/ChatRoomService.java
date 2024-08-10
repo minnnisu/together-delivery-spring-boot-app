@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageInvite.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteDto;

@@ -2,8 +2,8 @@ package org.minnnisu.togetherdelivery.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageInvite.ChatMessageDto;
-import org.minnnisu.togetherdelivery.dto.chat.stompChatMessage.StompChatMessageRequestDto;
+import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.StompChatMessageRequestDto;
 import org.minnnisu.togetherdelivery.handler.AssignPrincipalHandshakeHandler.StompPrincipal;
 import org.minnnisu.togetherdelivery.service.StompChatService;
 import org.springframework.messaging.handler.annotation.MessageMapping;

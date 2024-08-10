@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
-import org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageInvite.ChatMessageDto;
+import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
 
 import java.time.LocalDateTime;
 

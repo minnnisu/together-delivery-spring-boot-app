@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatMessage.chatMessageInvite;
+package org.minnnisu.togetherdelivery.dto.stomp.chatMessage;
 
 
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
-import org.minnnisu.togetherdelivery.dto.chat.stompChatMessage.StompChatMessageResponseDto;
+import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.StompChatMessageResponseDto;
 
 @Getter
 @Setter
