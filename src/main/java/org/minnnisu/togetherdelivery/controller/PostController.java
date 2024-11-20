@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
-import org.minnnisu.togetherdelivery.dto.post.PostDetailResponseDto;
-import org.minnnisu.togetherdelivery.dto.post.PostSaveResponseDto;
+import org.minnnisu.togetherdelivery.dto.post.postDetailResponseDto.PostDetailResponseDto;
+import org.minnnisu.togetherdelivery.dto.post.postSaveResponseDto.PostSaveResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
 import org.minnnisu.togetherdelivery.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -31,8 +31,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long id) {
-        PostDetailResponseDto responseDto = postService.getPostDetail(id);
+    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long postId,  @AuthenticationPrincipal User user) {
+        PostDetailResponseDto responseDto = postService.getPostDetail(postId, user);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

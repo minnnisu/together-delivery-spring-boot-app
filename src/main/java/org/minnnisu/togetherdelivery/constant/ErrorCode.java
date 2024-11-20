@@ -37,6 +37,9 @@ public enum ErrorCode {
     UserNotFoundError(
             HttpStatus.NOT_FOUND, "유저 정보를 찾을 수 없습니다."
     ),
+    UserPermissionDeniedError(
+            HttpStatus.FORBIDDEN, "권한이 없는 유저입니다."
+    ),
 
     // ----- Token ------
     NotValidAccessTokenError(
@@ -111,6 +114,37 @@ public enum ErrorCode {
     DeletedReplyError(
             HttpStatus.NOT_FOUND, "삭제된 답글입니다"
     ),
+
+    // ---- ChatRoom ----
+    AlreadyExistChatRoomError(
+            HttpStatus.BAD_REQUEST, "이미 존재하는 채팅방입니다."
+    ),
+    NoSuchChatRoomError(
+            HttpStatus.NOT_FOUND, "존재하지 않은 채팅방입니다"
+    ),
+    AlreadyExistChatRoomMemberError(
+            HttpStatus.BAD_REQUEST, "이미 존재하는 채팅방 인원 입니다."
+    ),
+    NoSuchMemberInChatRoomError(
+            HttpStatus.NOT_FOUND, "채팅방에 존재하지 않는 유저입니다."
+    ),
+    UnsupportedMessageTypeError(
+            HttpStatus.BAD_REQUEST, "지원되지 않은 메시지 타입입니다."
+    ),
+    NoSuchChatMessageError(
+            HttpStatus.NOT_FOUND, "존재하지 않은 채팅 메시지입니다"
+    ),
+    NotIncludeChatRoomCreatorInfoError(
+            HttpStatus.BAD_REQUEST, "채팅방을 생성한 유저의 정보가 없습니다."
+    ),
+    ChatInvitePermissionDeniedError(
+            HttpStatus.FORBIDDEN, "채팅방 초대 권한이 없는 멤버입니다."
+    ),
+
+    // ---- ChatMessage ----
+    NotTheSenderOfChatMessage(
+            HttpStatus.UNAUTHORIZED, "채팅 메시지의 작성자가 아닙니다."
+    )
     ;
 
     private final HttpStatus httpStatus;

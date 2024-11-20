@@ -70,7 +70,7 @@ public class SecurityConfig {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/auth/**","/api/**","/h2-console/**", "/images/**").permitAll()
+                                .requestMatchers("/", "/auth/**","/api/**","/h2-console/**", "/images/**", "/ws/chat").permitAll()
                                 .anyRequest().authenticated()
                 )
 //                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll())

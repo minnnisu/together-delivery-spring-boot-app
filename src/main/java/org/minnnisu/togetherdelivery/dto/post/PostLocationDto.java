@@ -16,22 +16,18 @@ public class PostLocationDto {
     private String address;
 
     @NotBlank
+    private String shortAddress;
+
+    @NotBlank
     private double latitude;
 
     @NotBlank
     private double longitude;
 
-    public static PostLocationDto of(String address, double latitude, double longitude){
-        return PostLocationDto.builder()
-                .address(address)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build();
-    }
-
     public static PostLocationDto fromEntity(Post post){
         return PostLocationDto.builder()
                 .address(post.getMeetLocation().getAddress())
+                .shortAddress(post.getMeetLocation().getShortAddress())
                 .latitude(post.getMeetLocation().getLatitude())
                 .longitude(post.getMeetLocation().getLongitude())
                 .build();

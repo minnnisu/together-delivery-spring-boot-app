@@ -2,6 +2,7 @@ package org.minnnisu.togetherdelivery.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,13 +24,36 @@ public class ChatMessage {
     private ChatRoom chatRoom;
 
     @ManyToOne
-    private ChatRoomPeople chatRoomPeople;
+    private ChatRoomMember sender;
 
     @Lob
     private String message;
+
+    private ChatMessageType chatMessageType;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     private LocalDateTime deletedAt;
+
+    public void updateSenderNull(){
+        this.sender = null;
+    }
+
+    public static ChatMessage of(ChatRoomMember sender, String message, ChatMessageType chatMessageType) {
+        return ChatMessage.builder()
+                .chatRoom(sender.getChatRoom())
+                .sender(sender)
+                .message(message)
+                .chatMessageType(chatMessageType)
+                .build();
+    }
+
+    public static ChatMessage of(ChatRoomMember sender, ChatMessageType chatMessageType) {
+        return ChatMessage.builder()
+                .chatRoom(sender.getChatRoom())
+                .sender(sender)
+                .chatMessageType(chatMessageType)
+                .build();
+    }
 }

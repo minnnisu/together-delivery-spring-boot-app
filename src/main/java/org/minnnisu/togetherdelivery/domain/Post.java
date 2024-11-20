@@ -24,11 +24,6 @@ public class Post {
     @ManyToOne
     private User user;
 
-    private String title;
-
-    @Lob
-    private String content;
-
     private String restaurantName;
 
     @ManyToOne
@@ -40,6 +35,9 @@ public class Post {
     private int deliveryFee;
 
     private int minOrderFee;
+
+    @Lob
+    private String content;
 
     @ColumnDefault("true")
     @Builder.Default()
@@ -53,16 +51,56 @@ public class Post {
 
     private LocalDateTime deletedAt;
 
+    public static Post of(Long id,
+                          User user,
+                          String restaurantName,
+                          Category category,
+                          Location meetLocation,
+                          int deliveryFee,
+                          int minOrderFee,
+                          String content,
+                          boolean status,
+                          LocalDateTime createdAt,
+                          LocalDateTime updatedAt,
+                          LocalDateTime deletedAt
+                          ){
+        return Post.builder()
+                .id(id)
+                .user(user)
+                .restaurantName(restaurantName)
+                .category(category)
+                .meetLocation(meetLocation)
+                .deliveryFee(deliveryFee)
+                .minOrderFee(minOrderFee)
+                .content(content)
+                .status(status)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
+
     public static Post of(PostSaveRequestDto postSaveRequestDto, User user, Category category, Location meetLocation) {
         return Post.builder()
                 .user(user)
-                .title(postSaveRequestDto.getTitle())
                 .content(postSaveRequestDto.getContent())
                 .restaurantName(postSaveRequestDto.getRestaurantName())
                 .meetLocation(meetLocation)
                 .category(category)
                 .deliveryFee(postSaveRequestDto.getDeliveryFee())
                 .minOrderFee(postSaveRequestDto.getMinOrderFee())
+                .build();
+    }
+
+    public static Post of(User user, String content, String restaurantName, Category category, Location meetLocation, int deliveryFee, int minOrderFee) {
+        return Post.builder()
+                .user(user)
+                .content(content)
+                .restaurantName(restaurantName)
+                .meetLocation(meetLocation)
+                .category(category)
+                .deliveryFee(deliveryFee)
+                .minOrderFee(minOrderFee)
                 .build();
     }
 }

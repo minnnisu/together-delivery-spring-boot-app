@@ -68,24 +68,6 @@ public class User implements UserDetails {
         return Collections.singleton((GrantedAuthority) () -> authority);
     }
 
-    public static User fromDto(
-            SignupRequestDto signupRequestDto,
-            PasswordEncoder passwordEncoder
-    ){
-        return User.builder()
-                .username(signupRequestDto.getUsername())
-                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
-                .name(signupRequestDto.getName())
-                .nickname(signupRequestDto.getNickname())
-                .email(signupRequestDto.getEmail())
-                .telephone(signupRequestDto.getTelephone())
-                .isTelephoneAuth(false)
-                .college(signupRequestDto.getCollege())
-                .isCollegeAuth(false)
-                .authority("ROLE_USER")
-                .build();
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -104,5 +86,49 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static User fromDto(
+            SignupRequestDto signupRequestDto,
+            PasswordEncoder passwordEncoder
+    ) {
+        return User.builder()
+                .username(signupRequestDto.getUsername())
+                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .name(signupRequestDto.getName())
+                .nickname(signupRequestDto.getNickname())
+                .email(signupRequestDto.getEmail())
+                .telephone(signupRequestDto.getTelephone())
+                .isTelephoneAuth(false)
+                .college(signupRequestDto.getCollege())
+                .isCollegeAuth(false)
+                .authority("ROLE_USER")
+                .build();
+    }
+
+    public static User of(
+            String username,
+            String password,
+            String name,
+            String nickname,
+            String email,
+            boolean isTelephoneAuth,
+            String telephone,
+            boolean isCollegeAuth,
+            String college,
+            PasswordEncoder passwordEncoder) {
+
+        return User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .name(name)
+                .nickname(nickname)
+                .email(email)
+                .telephone(telephone)
+                .isTelephoneAuth(isTelephoneAuth)
+                .college(college)
+                .isCollegeAuth(isCollegeAuth)
+                .authority("ROLE_USER")
+                .build();
     }
 }

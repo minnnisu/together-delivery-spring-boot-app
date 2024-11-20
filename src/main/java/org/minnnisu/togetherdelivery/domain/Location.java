@@ -23,6 +23,8 @@ public class Location {
 
     private String address;
 
+    private String shortAddress;
+
     private double latitude;
 
     private double longitude;
@@ -38,8 +40,43 @@ public class Location {
     public static Location fromDto(PostSaveRequestDto postSaveRequestDto){
         return Location.builder()
                 .address(postSaveRequestDto.getMeetLocation().getAddress())
+                .shortAddress(postSaveRequestDto.getMeetLocation().getShortAddress())
                 .latitude(postSaveRequestDto.getMeetLocation().getLatitude())
                 .longitude(postSaveRequestDto.getMeetLocation().getLongitude())
+                .build();
+    }
+
+    public static Location of(
+            Long id,
+            String address,
+            String shortAddress,
+            double latitude,
+            double longitude,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime deletedAt){
+        return Location.builder()
+                .id(id)
+                .address(address)
+                .shortAddress(shortAddress)
+                .latitude(latitude)
+                .longitude(longitude)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .deletedAt(deletedAt)
+                .build();
+    }
+
+    public static Location of(
+            String address,
+            String shortAddress,
+            double latitude,
+            double longitude){
+        return Location.builder()
+                .address(address)
+                .shortAddress(shortAddress)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build();
     }
 }

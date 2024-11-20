@@ -15,11 +15,12 @@ import java.time.LocalDateTime;
 public class PostSummaryDto {
     private Long id;
     private String nickname;
-    private String title;
     private String content;
+    private String restaurantName;
     private String categoryCode;
     private int deliveryFee;
     private int minOrderFee;
+    private PostLocationDto meetLocation;
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -28,14 +29,14 @@ public class PostSummaryDto {
         return PostSummaryDto.builder()
                 .id(post.getId())
                 .nickname(post.getUser().getNickname())
-                .title(post.getTitle())
                 .content(post.getContent())
+                .restaurantName(post.getRestaurantName())
                 .categoryCode(post.getCategory().getCategoryCode())
                 .deliveryFee(post.getDeliveryFee())
                 .minOrderFee(post.getMinOrderFee())
+                .meetLocation(PostLocationDto.fromEntity(post))
                 .status(post.isStatus())
                 .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }
