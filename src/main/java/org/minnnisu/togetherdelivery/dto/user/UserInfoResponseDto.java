@@ -15,7 +15,6 @@ public class UserInfoResponseDto {
     private String name;
     private String nickname;
     private String email;
-    private String telephone;
     private String college;
 
     public static UserInfoResponseDto fromEntity(User user) {
@@ -24,7 +23,6 @@ public class UserInfoResponseDto {
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
-                .telephone(user.getTelephone())
                 .college(user.getCollege())
                 .build();
     }
