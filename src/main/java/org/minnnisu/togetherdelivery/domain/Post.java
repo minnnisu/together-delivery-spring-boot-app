@@ -51,6 +51,10 @@ public class Post {
 
     private LocalDateTime deletedAt;
 
+    public void toggleStatus(){
+        this.status = !this.status;
+    }
+
     public static Post of(Long id,
                           User user,
                           String restaurantName,

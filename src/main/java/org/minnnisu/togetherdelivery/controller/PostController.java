@@ -8,6 +8,8 @@ import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.postDetailResponseDto.PostDetailResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.postSaveResponseDto.PostSaveResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
+import org.minnnisu.togetherdelivery.dto.post.postStatusToggle.PostStatusToggleDto;
+import org.minnnisu.togetherdelivery.dto.post.postStatusToggle.PostStatusToggleResponseDto;
 import org.minnnisu.togetherdelivery.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +46,11 @@ public class PostController {
     ) {
         PostSaveResponseDto responseDto = postService.savePost(user, post, files);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/toggle")
+    public ResponseEntity<PostStatusToggleResponseDto> togglePost(@AuthenticationPrincipal User user, @PathVariable Long id) {
+        PostStatusToggleDto dto = postService.togglePost(user, id);
+        return new ResponseEntity<>(PostStatusToggleResponseDto.fromDto(dto), HttpStatus.OK);
     }
 }
