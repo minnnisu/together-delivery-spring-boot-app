@@ -1,5 +1,6 @@
 package org.minnnisu.togetherdelivery.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
@@ -10,6 +11,7 @@ import org.minnnisu.togetherdelivery.dto.post.postDetailResponseDto.PostDetailRe
 import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.postSaveResponseDto.PostSaveResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.PostSaveRequestDto;
+import org.minnnisu.togetherdelivery.dto.post.postStatusToggle.PostStatusToggleDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostService{
     private final FileService fileService;
 
@@ -123,5 +126,13 @@ public class PostService{
     }
 
 
+    public PostStatusToggleDto togglePost(User user, Long id) {
+        Post foundPost = postRepository.findById(id).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
+        if(!foundPost.getUser().getUsername().equals(user.getUsername())) {
+            throw new CustomErrorException(ErrorCode.AccessDeniedError);
+        }
 
+        foundPost.toggleStatus();
+        return PostStatusToggleDto.fromEntity(foundPost);
+    }
 }
