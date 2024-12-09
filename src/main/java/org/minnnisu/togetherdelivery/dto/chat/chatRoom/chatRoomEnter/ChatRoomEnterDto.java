@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite;
+package org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomEnter;
 
 
 import lombok.AllArgsConstructor;
@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ChatRoomInviteDto {
+public class ChatRoomEnterDto {
     private Long chatRoomId;
-    private String invitedMember;
+    private String newMemberId;
     private LocalDateTime createdAt;
     private ChatMessageDto chatMessage;
 
-    public static ChatRoomInviteDto of(ChatRoomMember newChatRoomMember, ChatMessageDto chatMessage) {
-        return ChatRoomInviteDto.builder()
+    public static ChatRoomEnterDto of(ChatRoomMember newChatRoomMember, ChatMessageDto chatMessage) {
+        return ChatRoomEnterDto.builder()
                 .chatRoomId(newChatRoomMember.getChatRoom().getId())
-                .invitedMember(newChatRoomMember.getUser().getNickname())
+                .newMemberId(newChatRoomMember.getUser().getNickname())
                 .createdAt(newChatRoomMember.getCreatedAt())
                 .chatMessage(chatMessage)
                 .build();

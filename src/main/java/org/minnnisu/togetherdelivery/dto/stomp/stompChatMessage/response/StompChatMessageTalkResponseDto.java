@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage;
+package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,11 +11,9 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 @Setter
 @SuperBuilder
 public class StompChatMessageTalkResponseDto extends StompChatMessageResponseDto {
-    private Long chatMessageId;
-
     public static StompChatMessageTalkResponseDto fromEntity(ChatMessage chatMessage) {
         return StompChatMessageTalkResponseDto.builder()
-                .chatMessageId(chatMessage.getId())
+                .messageId(chatMessage.getId())
                 .message(chatMessage.getMessage())
                 .type(ChatMessageType.TALK)
                 .sender(chatMessage.getSender().getUser().getNickname())

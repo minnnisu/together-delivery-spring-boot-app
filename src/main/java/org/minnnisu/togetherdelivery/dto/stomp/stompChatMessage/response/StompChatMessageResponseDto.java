@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage;
+package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,8 @@ public class StompChatMessageResponseDto {
     private String message;
 
     private LocalDateTime createdAt;
+
+    private Long messageId;
 
     public static StompChatMessageResponseDto of(ChatMessageType type, String sender, String message, LocalDateTime createdAt) {
         return StompChatMessageResponseDto.builder()

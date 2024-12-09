@@ -9,11 +9,10 @@ import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
-import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.StompChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response.StompChatMessageEnterResponseDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomEnter.ChatRoomEnterDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
 import org.minnnisu.togetherdelivery.repository.*;
@@ -118,7 +117,7 @@ class ChatRoomServiceTest {
             given(stompChatService.sendInvitationMessage(any(), any(), any())).willReturn(chatMessageDto);
 
             // when
-            ChatRoomInviteDto result = chatRoomService.inviteMember(chatRoomInviteRequestDto, creator);
+            ChatRoomEnterDto result = chatRoomService.inviteMember(chatRoomInviteRequestDto, creator);
             assertThat(result.getChatRoomId())
                     .isEqualTo(newChatRoomMember.getChatRoom().getId());
             assertThat(result.getInvitedMember())

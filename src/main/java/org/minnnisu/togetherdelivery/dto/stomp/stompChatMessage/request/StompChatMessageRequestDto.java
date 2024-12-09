@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage;
+package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.request;
 
 import lombok.Getter;
 import lombok.Setter;
