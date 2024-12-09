@@ -4,6 +4,7 @@ import org.minnnisu.togetherdelivery.domain.ChatRoom;
 import org.minnnisu.togetherdelivery.domain.ChatRoomMember;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

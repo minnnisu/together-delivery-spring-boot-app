@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
-import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.StompChatMessageResponseDto;
+import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response.StompChatMessageResponseDto;
 
 @Getter
 @Setter

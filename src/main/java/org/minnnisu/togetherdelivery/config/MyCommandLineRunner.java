@@ -16,8 +16,8 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initializeDefaultCategory();
-        log.info("초기 카테고리 데이터 생성");
+//        initializeDefaultCategory();
+//        log.info("초기 카테고리 데이터 생성");
     }
 
     public void initializeDefaultCategory(){

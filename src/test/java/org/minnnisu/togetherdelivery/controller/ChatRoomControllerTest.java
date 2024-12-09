@@ -16,11 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
 import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
-import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.StompChatMessageEnterResponseDto;
+import org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response.StompChatMessageEnterResponseDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.ChatRoomInviteRequestDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomEnter.ChatRoomEnterDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.exception.CustomErrorException;
@@ -121,7 +120,7 @@ class ChatRoomControllerTest {
 
 
             given(chatRoomService.inviteMember(any(), any()))
-                    .willReturn(new ChatRoomInviteDto(
+                    .willReturn(new ChatRoomEnterDto(
                             1L,
                             "minnnisu",
                             LocalDateTime.of(2024, 5, 1, 1, 1, 1),

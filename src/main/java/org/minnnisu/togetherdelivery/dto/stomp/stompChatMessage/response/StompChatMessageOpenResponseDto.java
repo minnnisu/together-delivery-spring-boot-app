@@ -1,4 +1,4 @@
-package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage;
+package org.minnnisu.togetherdelivery.dto.stomp.stompChatMessage.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import org.minnnisu.togetherdelivery.domain.ChatMessage;
 public class StompChatMessageOpenResponseDto extends StompChatMessageResponseDto {
     public static StompChatMessageOpenResponseDto fromEntity(ChatMessage chatMessage) {
         return StompChatMessageOpenResponseDto.builder()
+                .messageId(chatMessage.getId())
                 .message("채팅방이 생성되었습니다.")
                 .type(ChatMessageType.OPEN)
                 .sender(chatMessage.getSender().getUser().getNickname())

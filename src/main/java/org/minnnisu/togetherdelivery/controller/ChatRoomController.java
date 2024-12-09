@@ -4,10 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.domain.User;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomAccess.ChatRoomAccessDto;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomAccess.ChatRoomAccessResponseDto;
 import org.minnnisu.togetherdelivery.dto.stomp.chatMessage.ChatMessageDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitRequestDto;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomExit.ChatRoomExitResponseDto;
-import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomInvite.*;
+import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomEnter.*;
 import org.minnnisu.togetherdelivery.dto.chat.chatRoom.chatRoomList.ChatRoomListResponseDto;
 import org.minnnisu.togetherdelivery.service.ChatRoomService;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/chat/room")
-public class ChatRoomController {
+public class
+ChatRoomController {
     private final ChatRoomService chatRoomService;
     private final SimpMessageSendingOperations sendingOperations;
 
@@ -31,18 +34,27 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatRoomListResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/invite")
-    public ResponseEntity<ChatRoomInviteResponseDto> inviteMember(
-            @Valid @RequestBody ChatRoomInviteRequestDto chatRoomInviteRequestDto,
+    @GetMapping("/{chatRoomId}/access")
+    public ResponseEntity<ChatRoomAccessResponseDto> accessChatRoom(
+            @PathVariable Long chatRoomId,
             @AuthenticationPrincipal User user
     ){
-        ChatRoomInviteDto chatRoomInviteDto = chatRoomService.inviteMember(chatRoomInviteRequestDto, user);
+        ChatRoomAccessDto chatRoomAccessDto = chatRoomService.accessChatRoom(chatRoomId, user);
+        return new ResponseEntity<>(ChatRoomAccessResponseDto.fromDto(chatRoomAccessDto), HttpStatus.OK);
+    }
 
-        ChatMessageDto chatMessageDto = chatRoomInviteDto.getChatMessage();
+    @PostMapping("/{chatRoomId}/enter")
+    public ResponseEntity<ChatRoomEnterResponseDto> enterChatRoom(
+            @PathVariable Long chatRoomId,
+            @AuthenticationPrincipal User user
+    ){
+        ChatRoomEnterDto chatRoomEnterDto = chatRoomService.enterChatRoom(chatRoomId, user);
+
+        ChatMessageDto chatMessageDto = chatRoomEnterDto.getChatMessage();
 
         sendingOperations.convertAndSend(chatMessageDto.getPath(), chatMessageDto.getStompChatMessageResponseDto());
 
-        return new ResponseEntity<>(ChatRoomInviteResponseDto.fromDto(chatRoomInviteDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(ChatRoomEnterResponseDto.fromDto(chatRoomEnterDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/exit")

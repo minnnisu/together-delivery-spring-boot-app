@@ -36,10 +36,6 @@ public class User implements UserDetails {
 
     private String email;
 
-    private boolean isTelephoneAuth;
-
-    private String telephone;
-
     private boolean isCollegeAuth;
 
     private String college;
@@ -98,8 +94,6 @@ public class User implements UserDetails {
                 .name(signupRequestDto.getName())
                 .nickname(signupRequestDto.getNickname())
                 .email(signupRequestDto.getEmail())
-                .telephone(signupRequestDto.getTelephone())
-                .isTelephoneAuth(false)
                 .college(signupRequestDto.getCollege())
                 .isCollegeAuth(false)
                 .authority("ROLE_USER")
@@ -112,8 +106,6 @@ public class User implements UserDetails {
             String name,
             String nickname,
             String email,
-            boolean isTelephoneAuth,
-            String telephone,
             boolean isCollegeAuth,
             String college,
             PasswordEncoder passwordEncoder) {
@@ -124,8 +116,6 @@ public class User implements UserDetails {
                 .name(name)
                 .nickname(nickname)
                 .email(email)
-                .telephone(telephone)
-                .isTelephoneAuth(isTelephoneAuth)
                 .college(college)
                 .isCollegeAuth(isCollegeAuth)
                 .authority("ROLE_USER")

@@ -144,8 +144,10 @@ public enum ErrorCode {
     // ---- ChatMessage ----
     NotTheSenderOfChatMessage(
             HttpStatus.UNAUTHORIZED, "채팅 메시지의 작성자가 아닙니다."
-    )
-    ;
+    ),
+    ClosedPostError(
+            HttpStatus.FORBIDDEN, "비활성화된 게시물입니다."
+    );
 
     private final HttpStatus httpStatus;
     private final String message;

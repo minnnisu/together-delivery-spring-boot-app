@@ -51,10 +51,6 @@ public class SignupRequestDto {
     @Size(max = 30, message = "TooShortOrLongEmailError")
     private String email;
 
-    @NotBlank(message = "NoTelephoneError")
-    @Size(max = 20, message = "TooShortOrLongTelephoneError")
-    private String telephone;
-
     @NotBlank(message = "NoCollegeError")
     @Size(max = 20, message = "TooShortOrLongCollegeError")
     private String college;
