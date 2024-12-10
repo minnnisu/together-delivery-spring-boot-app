@@ -3,6 +3,7 @@ package org.minnnisu.togetherdelivery.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.minnnisu.togetherdelivery.constant.MealCategoryCode;
 import org.minnnisu.togetherdelivery.domain.User;
 import org.minnnisu.togetherdelivery.dto.post.PostListResponseDto;
 import org.minnnisu.togetherdelivery.dto.post.postDetailResponseDto.PostDetailResponseDto;
@@ -27,13 +28,16 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false, defaultValue = "1") int page){
-        PostListResponseDto responseDto = postService.getPost(page);
+    public ResponseEntity<PostListResponseDto> getPost(@RequestParam(required = false) Long cursor,
+                                                       @RequestParam(required = false) Boolean status,
+                                                       @RequestParam(required = false) MealCategoryCode category,
+                                                       @AuthenticationPrincipal User user) {
+        PostListResponseDto responseDto = postService.getPosts(user, cursor, status, category);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id")  Long postId,  @AuthenticationPrincipal User user) {
+    public ResponseEntity<PostDetailResponseDto> getPost(@PathVariable(name = "id") Long postId, @AuthenticationPrincipal User user) {
         PostDetailResponseDto responseDto = postService.getPostDetail(postId, user);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

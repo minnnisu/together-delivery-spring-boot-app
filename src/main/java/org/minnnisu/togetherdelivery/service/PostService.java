@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.minnnisu.togetherdelivery.constant.ChatMessageType;
 import org.minnnisu.togetherdelivery.constant.ErrorCode;
+import org.minnnisu.togetherdelivery.constant.MealCategoryCode;
 import org.minnnisu.togetherdelivery.constant.UploadPathType;
 import org.minnnisu.togetherdelivery.domain.*;
 import org.minnnisu.togetherdelivery.dto.post.postDetailResponseDto.PostDetailResponseDto;
@@ -29,7 +30,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PostService{
+public class PostService {
     private final FileService fileService;
 
     private final PostRepository postRepository;
@@ -40,12 +41,22 @@ public class PostService{
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    private final int PAGE_SIZE = 10;
+    public PostListResponseDto getPosts(User user, Long cursor, Boolean status, MealCategoryCode mealCategoryCode) {
+        if (user == null) {
+            throw new CustomErrorException(ErrorCode.UserNotFoundError);
+        }
 
-    public PostListResponseDto getPost(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Post> post = postRepository.findAll(pageable);
-        return PostListResponseDto.fromPage(post);
+        log.info("status: {}", status);
+
+        Category foundCategory = null;
+        Pageable postListPageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        if (mealCategoryCode != null) {
+            foundCategory = categoryRepository.findByCategoryCode(mealCategoryCode.name()).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchCategoryError));
+        }
+
+        Page<Post> posts = postRepository.findPosts(cursor, status, foundCategory, user.getCollege(), postListPageable);
+        return PostListResponseDto.fromPage(posts);
     }
 
     public PostDetailResponseDto getPostDetail(Long id, User user) {
@@ -60,7 +71,7 @@ public class PostService{
             isChatRoomMember = true;
         }
 
-        if(!isPostCreator) {
+        if (!isPostCreator) {
             Optional<ChatRoomMember> chatRoomMember = chatRoomMemberRepository.findByChatRoomAndUser(chatRoom, user);
             if (chatRoomMember.isPresent()) {
                 isChatRoomMember = true;
@@ -128,7 +139,7 @@ public class PostService{
 
     public PostStatusToggleDto togglePost(User user, Long id) {
         Post foundPost = postRepository.findById(id).orElseThrow(() -> new CustomErrorException(ErrorCode.NoSuchPostError));
-        if(!foundPost.getUser().getUsername().equals(user.getUsername())) {
+        if (!foundPost.getUser().getUsername().equals(user.getUsername())) {
             throw new CustomErrorException(ErrorCode.AccessDeniedError);
         }
 
